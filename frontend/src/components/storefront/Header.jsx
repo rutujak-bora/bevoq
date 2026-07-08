@@ -56,9 +56,17 @@ export default function Header() {
           </Sheet>
 
           {/* Logo */}
-          <Link to="/" className="flex-1 md:flex-none text-center md:text-left" data-testid="logo-link">
-            <h1 className="font-serif text-3xl md:text-4xl tracking-[0.15em] text-navy font-medium">BEVOQ<span className="text-gold">.</span></h1>
-            <p className="hidden md:block text-[10px] tracking-[0.3em] uppercase text-navy/60 mt-0.5">The Art of Everyday Luxury</p>
+          <Link to="/" className="flex-1 md:flex-none flex items-center gap-3 justify-center md:justify-start" data-testid="logo-link">
+            <img
+              src="https://customer-assets.emergentagent.com/job_threads-platform/artifacts/ktu1ka7j_WhatsApp%20Image%202026-07-08%20at%2011.36.24.jpeg"
+              alt="BEVOQ"
+              className="h-12 md:h-14 w-auto object-cover object-center"
+              style={{ clipPath: "inset(15% 20% 15% 20%)" }}
+            />
+            <div className="text-left">
+              <h1 className="font-serif text-2xl md:text-3xl tracking-[0.15em] text-navy font-medium leading-none">BEVOQ<span className="text-gold">.</span></h1>
+              <p className="hidden md:block text-[10px] tracking-[0.3em] uppercase text-navy/60 mt-1">The Art of Everyday Luxury</p>
+            </div>
           </Link>
 
           {/* Nav (desktop) */}

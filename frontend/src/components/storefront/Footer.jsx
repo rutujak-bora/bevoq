@@ -69,7 +69,15 @@ export default function Footer() {
       {/* Links */}
       <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-14 grid grid-cols-2 md:grid-cols-4 gap-10">
         <div>
-          <h4 className="font-serif text-2xl text-gold">BEVOQ<span className="text-white">.</span></h4>
+          <div className="flex items-center gap-3">
+            <img
+              src="https://customer-assets.emergentagent.com/job_threads-platform/artifacts/ktu1ka7j_WhatsApp%20Image%202026-07-08%20at%2011.36.24.jpeg"
+              alt="BEVOQ"
+              className="h-10 w-auto object-cover"
+              style={{ clipPath: "inset(15% 20% 15% 20%)" }}
+            />
+            <h4 className="font-serif text-2xl text-gold">BEVOQ<span className="text-white">.</span></h4>
+          </div>
           <p className="text-white/60 text-sm mt-4 leading-relaxed">The Art of Everyday Luxury. Considered fashion, crafted with intention.</p>
           <div className="flex gap-4 mt-6">
             <a href="#" data-testid="social-instagram" className="text-white/70 hover:text-gold"><Instagram size={18} /></a>

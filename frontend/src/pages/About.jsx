@@ -2,13 +2,19 @@ import React from "react";
 export default function About() {
   return (
     <div>
-      <section className="relative h-[60vh] min-h-[500px] overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1920&q=85" alt="" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-navy/50" />
-        <div className="relative max-w-[1200px] mx-auto px-6 h-full flex items-end pb-20">
+      <section className="bg-navy py-24">
+        <div className="max-w-[1200px] mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
           <div className="text-white">
             <p className="overline text-gold">Our Story</p>
-            <h1 className="serif-display text-5xl md:text-7xl mt-3">The Art of<br/><em className="text-gold not-italic">Everyday Luxury.</em></h1>
+            <h1 className="serif-display text-5xl md:text-7xl mt-4 leading-[0.95]">The Art of<br/><em className="text-gold not-italic">Everyday Luxury.</em></h1>
+            <p className="text-white/70 mt-6 max-w-md">A signature. A promise. A way of dressing.</p>
+          </div>
+          <div className="aspect-[3/4] overflow-hidden max-w-md mx-auto md:ml-auto shadow-2xl">
+            <img
+              src="https://customer-assets.emergentagent.com/job_threads-platform/artifacts/ktu1ka7j_WhatsApp%20Image%202026-07-08%20at%2011.36.24.jpeg"
+              alt="BEVOQ brand identity"
+              className="w-full h-full object-cover"
+            />
           </div>
         </div>
       </section>
