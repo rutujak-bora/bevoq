@@ -1,0 +1,127 @@
+{
+  "project_info": {
+    "domain": "E-commerce (Fashion/Apparel)",
+    "app_type": "Storefront + Admin Panel",
+    "brand_name": "VOGUE."
+  },
+  "theme_and_archetype": {
+    "theme": "Light",
+    "archetype": "Archetype 4: Swiss & High-Contrast (Editorial Variant)",
+    "reasoning": "For a fashion storefront, we want an editorial 'lookbook' feel. The product imagery provides the color, while the UI remains stark, high-contrast, and minimalist to elevate the premium perception."
+  },
+  "typography": {
+    "strategy": "The 'Old Money Tech' variant: Elegant Classic Serif for Headings to communicate luxury and fashion, paired with a Sterile Geometric Mono/Sans for the body/admin to maintain technical clarity.",
+    "fonts": {
+      "heading": "Cormorant Garamond",
+      "body": "Outfit",
+      "mono": "JetBrains Mono"
+    },
+    "hierarchy": {
+      "h1": "text-5xl sm:text-6xl tracking-tighter leading-none font-light",
+      "h2": "text-3xl sm:text-4xl tracking-tight leading-tight",
+      "h3": "text-xl sm:text-2xl tracking-tight",
+      "body": "text-base leading-relaxed",
+      "overline": "text-xs uppercase tracking-[0.2em] font-medium"
+    }
+  },
+  "colors": {
+    "background": "#FAFAFA",
+    "surface": "#FFFFFF",
+    "primary": "#0A0A0A",
+    "primary_foreground": "#FFFFFF",
+    "muted": "#F3F4F6",
+    "muted_foreground": "#6B7280",
+    "border": "#E5E7EB",
+    "accent": "#8B0000",
+    "accent_foreground": "#FFFFFF",
+    "success": "#166534",
+    "warning": "#854D0E"
+  },
+  "spacing_and_layout": {
+    "philosophy": "Generous Spacing for Storefront, Control Room for Admin.",
+    "storefront": {
+      "container_padding": "px-6 md:px-12 lg:px-24",
+      "section_gap": "py-20 md:py-32",
+      "grid": "Bento Grid (Mode A: Tetris Grid) for top collections - massive imagery spanning multiple columns, minimal gaps (gap-4 or gap-1)."
+    },
+    "admin_panel": {
+      "container_padding": "p-6",
+      "grid": "Control Room Grid (Mode B) - strict hierarchy, gap-4, high density. pure HTML/Tailwind structures with strict border layouts."
+    }
+  },
+  "surface_strategies": {
+    "storefront_header": "Crystal Glass: bg-white/80 backdrop-blur-xl border-b border-black/5. Must be sticky at top (z-50).",
+    "storefront_cards": "Flat, sharp edges (rounded-none). Product cards have no borders, relying entirely on image and text alignment. Image container has overflow-hidden, image scales on hover.",
+    "admin_cards": "Flat background, 1px subtle border (border-border), no shadow. Slight shadow-sm on hover.",
+    "buttons": "Primary: Sharp edges (rounded-none), pure black (bg-[#0A0A0A] text-white), hover:bg-black/80. Secondary: border border-black/20 text-black hover:border-black."
+  },
+  "motion_and_interactions": {
+    "hover_states": "Product images must scale up (hover:scale-105) with a smooth transition (transition-transform duration-700 ease-out).",
+    "page_transitions": "Fade in on scroll for sections.",
+    "buttons": "Color inversion or fill animation on hover."
+  },
+  "components_usage": {
+    "forms": "Use Shadcn Form, Input, Select, Checkbox. Customize inputs to have rounded-none, border-b only (optional) or stark 1px borders.",
+    "modals_drawers": "Use Shadcn Sheet for Cart and Wishlist sidebars. Use Dialog for Quick View.",
+    "tables": "Shadcn Table for Admin panel. Clean, monochrome.",
+    "icons": "lucide-react for standard UI, @phosphor-icons/react (Thin/Light weight) if an editorial feel is needed for storefront."
+  },
+  "media": {
+    "rules": "All images MUST use the provided URLs below. Never use generic placeholders.",
+    "hero_banner": {
+      "url": "https://images.unsplash.com/photo-1507553532144-b9df5e38c8d1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1ODR8MHwxfHNlYXJjaHwzfHxmYXNoaW9uJTIwbW9kZWwlMjBzdHJlZXR3ZWFyJTIwbG9va2Jvb2t8ZW58MHx8fHwxNzgzNDkwOTQ3fDA&ixlib=rb-4.1.0&q=85",
+      "description": "Main hero banner showing street style fashion. Use with a subtle gradient overlay (bg-gradient-to-r from-black/40 to-transparent) to ensure text contrast if text is placed over it."
+    },
+    "shop_collections": [
+      {
+        "category": "Dresses",
+        "url": "https://images.unsplash.com/photo-1612336307429-8a898d10e223?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODl8MHwxfHNlYXJjaHwxfHxlbGVnYW50JTIwZHJlc3MlMjBmYXNoaW9uJTIwbW9kZWx8ZW58MHx8fHwxNzgzNDkwOTQ3fDA&ixlib=rb-4.1.0&q=85"
+      },
+      {
+        "category": "T-Shirts",
+        "url": "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MTJ8MHwxfHNlYXJjaHwxfHx0c2hpcnQlMjBvbiUyMG1vZGVsfGVufDB8fHx8MTc4MzQ5MDk2MHww&ixlib=rb-4.1.0&q=85"
+      },
+      {
+        "category": "Crop Tops",
+        "url": "https://images.unsplash.com/photo-1762343949052-c086a93fceac?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzl8MHwxfHNlYXJjaHwzfHx3b21hbiUyMHdlYXJpbmclMjBjcm9wJTIwdG9wfGVufDB8fHx8MTc4MzQ5MDk0OHww&ixlib=rb-4.1.0&q=85"
+      },
+      {
+        "category": "Hoodies / Outerwear",
+        "url": "https://images.unsplash.com/photo-1760551733073-dd140353506b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzl8MHwxfHNlYXJjaHwyfHx3b21hbiUyMHdlYXJpbmclMjBjcm9wJTIwdG9wfGVufDB8fHx8MTc4MzQ5MDk0OHww&ixlib=rb-4.1.0&q=85"
+      }
+    ],
+    "featured_products": [
+      {
+        "url": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MTJ8MHwxfHNlYXJjaHwyfHx0c2hpcnQlMjBvbiUyMG1vZGVsfGVufDB8fHx8MTc4MzQ5MDk2MHww&ixlib=rb-4.1.0&q=85",
+        "name": "Classic White Tee"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1610312774212-6bde94e8c0b0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODl8MHwxfHNlYXJjaHw0fHxlbGVnYW50JTIwZHJlc3MlMjBmYXNoaW9uJTIwbW9kZWx8ZW58MHx8fHwxNzgzNDkwOTQ4fDA&ixlib=rb-4.1.0&q=85",
+        "name": "Ivory Midi Dress"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1721637686340-de9f8cebda5a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1ODR8MHwxfHNlYXJjaHwyfHxmYXNoaW9uJTIwbW9kZWwlMjBzdHJlZXR3ZWFyJTIwbG9va2Jvb2t8ZW58MHx8fHwxNzgzNDkwOTQ3fDA&ixlib=rb-4.1.0&q=85",
+        "name": "Oversized Graphic Tee"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1627225925683-1da7021732ea?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MTJ8MHwxfHNlYXJjaHwzfHx0c2hpcnQlMjBvbiUyMG1vZGVsfGVufDB8fHx8MTc4MzQ5MDk2MHww&ixlib=rb-4.1.0&q=85",
+        "name": "Signature Black Crew"
+      }
+    ],
+    "brand_logo": "Use purely typography for the logo: <h1 className='font-serif text-3xl font-bold tracking-tighter'>VOGUE.</h1>"
+  },
+  "testing": {
+    "attributes": "All interactive elements MUST include data-testid. Example: data-testid='add-to-cart-button'"
+  },
+  "instructions_to_main_agent": [
+    "Build the storefront prioritizing imagery. Product cards should have large images and minimal text below (left-aligned: Title, Price).",
+    "Do not use generic border-radii for the storefront. Elements should be sharp (rounded-none) to convey a brutalist high-fashion editorial look.",
+    "For the admin panel, use Shadcn with a clean, high-contrast monochrome style.",
+    "Implement the Top Collections grid as an asymmetrical Bento layout spanning multiple rows/cols.",
+    "Header must be sticky with a glassmorphism effect (backdrop-blur-xl bg-white/80).",
+    "For icons, use lucide-react with stroke-width 1.5 to maintain an elegant, thin look.",
+    "Ensure the hero image overlay is not too dark; maximum bg-black/40 if text is on top.",
+    "Follow standard e-commerce flows (Cart Sidebar, Checkout Page, Product detail gallery).",
+    "Add hover:scale-105 transition-transform on all product listing images to add life."
+  ]
+}
