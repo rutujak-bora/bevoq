@@ -1,0 +1,36 @@
+{
+  "summary": "First-finish smoke test for BEVOQ fashion e-commerce. Backend (health, seed data, auth, products/filters, collections, newsletter, wishlist, checkout with WELCOME10, orders, admin dashboard/RBAC/orders/customers/payments) all working. Frontend (home hero, all products listing with 8 cards, PDP with size/color/add-to-cart, cart display, admin login redirect to /admin dashboard) all rendering correctly.",
+  "tested_scope": ["backend", "frontend", "auth", "integration"],
+  "passed": [
+    "GET /api/ returns {message:'BEVOQ API'}",
+    "Seed data verified: 8 products, 7 collections, admin@bevoq.com + customer@bevoq.com",
+    "POST /api/auth/login admin@bevoq.com returns role=admin + JWT",
+    "POST /api/auth/login customer@bevoq.com returns role=customer + JWT + seeded address",
+    "GET /api/auth/me with Bearer token returns user",
+    "GET /api/products with filters featured/trending/search/price/sort all 200",
+    "GET /api/products/camel-wool-coat returns full product",
+    "GET /api/collections returns 7 collections",
+    "POST /api/newsletter/subscribe returns discount_code WELCOME10",
+    "POST /api/wishlist/{slug}, GET /api/wishlist work with auth",
+    "POST /api/checkout with WELCOME10 + COD creates order successfully",
+    "GET /api/orders returns user's created order",
+    "GET /api/admin/dashboard/stats returns 200 for admin, 403 for customer (RBAC works)",
+    "GET /api/admin/orders, /api/admin/customers, /api/admin/payments all 200 with admin token",
+    "Frontend home renders hero, navigation, announcement bar with WELCOME10",
+    "Frontend /products lists 8 product cards with SORT/CATEGORY/SIZE filters",
+    "Frontend /products/camel-wool-coat PDP renders with testids: product-title, product-price, size-S/M/L, color-Camel/Black, qty-display, add-to-cart-btn",
+    "Add-to-cart flow: select size+color -> click add-to-cart -> cart shows Camel Wool Coat with Size S Camel, subtotal ₹6,499, delivery FREE, checkout button visible",
+    "Admin login form (admin-login-email/password/submit testids) authenticates and redirects to /admin dashboard showing revenue chart, customers list, recent orders"
+  ],
+  "failed": [],
+  "action_items": [
+    "NOTE: Product detail route is /products/:slug (not /product/:slug). Testids listed in problem statement mention 'product-card-threads-platform' but actual slugs are like 'camel-wool-coat' - update problem statement testid examples if needed."
+  ],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "retest_needed": false,
+  "full_testing_deferred": true,
+  "mocked_apis_noted": [
+    "Razorpay payment_method accepted without gateway call (as designed)",
+    "Order confirmation emails logged as [MOCK EMAIL] (as designed)"
+  ]
+}
