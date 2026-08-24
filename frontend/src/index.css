@@ -1,17 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&family=Cinzel:wght@500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --bevoq-navy: #0A1A3E;
-  --bevoq-navy-deep: #061029;
-  --bevoq-navy-soft: #1A2B54;
-  --bevoq-gold: #C9A961;
-  --bevoq-gold-soft: #D9BF7E;
-  --bevoq-cream: #FAF7F0;
-  --bevoq-ivory: #F5F1E8;
+  --bevoq-burgundy: #580018;
+  --bevoq-burgundy-deep: #3D0010;
+  --bevoq-burgundy-soft: #7A0C26;
+  --bevoq-navy: #580018;
+  --bevoq-navy-deep: #3D0010;
+  --bevoq-navy-soft: #7A0C26;
+  --bevoq-gold: #D4AF37;
+  --bevoq-gold-soft: #E8CF82;
+  --bevoq-cream: #FAF6F4;
+  --bevoq-ivory: #F5EFEA;
   --bevoq-charcoal: #1A1A1A;
 }
 
@@ -20,42 +23,43 @@ body {
   font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #FAFAFA;
-  color: #0A0A0A;
+  background: #FAFAF9;
+  color: #1A1A1A;
 }
 
 .font-serif { font-family: 'Cormorant Garamond', Georgia, serif; }
 .font-sans { font-family: 'Outfit', sans-serif; }
+.font-brand { font-family: 'Cinzel', 'Cormorant Garamond', Georgia, serif; }
 
-::selection { background: var(--bevoq-gold); color: var(--bevoq-navy); }
+::selection { background: var(--bevoq-burgundy); color: #FFFFFF; }
 
 @layer base {
   :root {
-    --background: 44 40% 96%;
-    --foreground: 224 66% 14%;
+    --background: 30 20% 98%;
+    --foreground: 345 60% 12%;
     --card: 0 0% 100%;
-    --card-foreground: 224 66% 14%;
+    --card-foreground: 345 60% 12%;
     --popover: 0 0% 100%;
-    --popover-foreground: 224 66% 14%;
-    --primary: 224 71% 14%;
+    --popover-foreground: 345 60% 12%;
+    --primary: 345 100% 17%;
     --primary-foreground: 0 0% 98%;
-    --secondary: 44 40% 92%;
-    --secondary-foreground: 224 66% 14%;
-    --muted: 44 20% 94%;
-    --muted-foreground: 224 15% 40%;
-    --accent: 41 46% 58%;
-    --accent-foreground: 224 66% 14%;
+    --secondary: 30 20% 94%;
+    --secondary-foreground: 345 60% 12%;
+    --muted: 30 15% 94%;
+    --muted-foreground: 345 15% 42%;
+    --accent: 43 65% 52%;
+    --accent-foreground: 345 100% 17%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 44 15% 87%;
-    --input: 44 15% 87%;
-    --ring: 224 66% 14%;
+    --border: 30 15% 88%;
+    --input: 30 15% 88%;
+    --ring: 345 100% 17%;
     --radius: 0.25rem;
-    --chart-1: 41 46% 58%;
-    --chart-2: 224 66% 14%;
-    --chart-3: 224 40% 40%;
-    --chart-4: 41 30% 70%;
-    --chart-5: 224 20% 60%;
+    --chart-1: 345 100% 17%;
+    --chart-2: 43 65% 52%;
+    --chart-3: 345 70% 30%;
+    --chart-4: 43 50% 70%;
+    --chart-5: 345 40% 50%;
   }
 }
 
@@ -65,14 +69,18 @@ body {
 }
 
 /* Utility classes */
-.text-navy { color: var(--bevoq-navy); }
+.text-burgundy { color: var(--bevoq-burgundy); }
+.text-navy { color: var(--bevoq-burgundy); }
 .text-gold { color: var(--bevoq-gold); }
-.bg-navy { background-color: var(--bevoq-navy); }
-.bg-navy-deep { background-color: var(--bevoq-navy-deep); }
+.bg-burgundy { background-color: var(--bevoq-burgundy); }
+.bg-burgundy-deep { background-color: var(--bevoq-burgundy-deep); }
+.bg-navy { background-color: var(--bevoq-burgundy); }
+.bg-navy-deep { background-color: var(--bevoq-burgundy-deep); }
 .bg-gold { background-color: var(--bevoq-gold); }
 .bg-cream { background-color: var(--bevoq-cream); }
 .border-gold { border-color: var(--bevoq-gold); }
-.border-navy { border-color: var(--bevoq-navy); }
+.border-burgundy { border-color: var(--bevoq-burgundy); }
+.border-navy { border-color: var(--bevoq-burgundy); }
 
 .overline {
   font-size: 0.75rem;
@@ -95,9 +103,9 @@ body {
   content: '';
   position: absolute;
   left: 0; right: 0; bottom: -6px;
-  height: 1px;
-  background: var(--bevoq-gold);
-  transform: scaleX(0.4);
+  height: 2px;
+  background: var(--bevoq-burgundy);
+  transform: scaleX(0.3);
   transition: transform 300ms ease;
   transform-origin: left;
 }
@@ -107,16 +115,16 @@ body {
 .product-img { transition: transform 700ms ease; }
 .group:hover .product-img { transform: scale(1.05); }
 
-/* Hero overlay */
+/* Hero overlay with rich burgundy tint */
 .hero-overlay {
-  background: linear-gradient(180deg, rgba(10,26,62,0.15) 0%, rgba(10,26,62,0.45) 100%);
+  background: linear-gradient(180deg, rgba(61,0,16,0.35) 0%, rgba(88,0,24,0.7) 100%);
 }
 
 /* Sharp buttons */
 .btn-primary {
-  background: var(--bevoq-navy);
+  background: var(--bevoq-burgundy);
   color: #fff;
-  border: 1px solid var(--bevoq-navy);
+  border: 1px solid var(--bevoq-burgundy);
   padding: 0.85rem 2rem;
   font-size: 0.75rem;
   letter-spacing: 0.2em;
@@ -125,13 +133,13 @@ body {
   transition: all 250ms ease;
   cursor: pointer;
 }
-.btn-primary:hover { background: var(--bevoq-gold); border-color: var(--bevoq-gold); color: var(--bevoq-navy); }
+.btn-primary:hover { background: var(--bevoq-burgundy-deep); border-color: var(--bevoq-burgundy-deep); color: #fff; }
 .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .btn-outline {
   background: transparent;
-  color: var(--bevoq-navy);
-  border: 1px solid var(--bevoq-navy);
+  color: var(--bevoq-burgundy);
+  border: 1px solid var(--bevoq-burgundy);
   padding: 0.85rem 2rem;
   font-size: 0.75rem;
   letter-spacing: 0.2em;
@@ -140,12 +148,12 @@ body {
   transition: all 250ms ease;
   cursor: pointer;
 }
-.btn-outline:hover { background: var(--bevoq-navy); color: #fff; }
+.btn-outline:hover { background: var(--bevoq-burgundy); color: #fff; }
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: var(--bevoq-cream); }
-::-webkit-scrollbar-thumb { background: var(--bevoq-navy); border-radius: 0; }
+::-webkit-scrollbar-thumb { background: var(--bevoq-burgundy); border-radius: 0; }
 
 /* Fade-up animation */
 @keyframes fadeUp {

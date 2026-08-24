@@ -18,9 +18,12 @@ export default function AdminLayout({ children }) {
   return (
     <div className="min-h-screen bg-cream flex" data-testid="admin-layout">
       <aside className="w-64 bg-navy text-white flex flex-col">
-        <Link to="/admin" className="p-6 border-b border-white/10">
-          <div className="font-serif text-2xl">BEVOQ<span className="text-gold">.</span></div>
-          <div className="text-[10px] tracking-[0.25em] uppercase text-white/60 mt-1">Admin Console</div>
+        <Link to="/admin" className="p-6 border-b border-white/10 flex items-center gap-3">
+          <img src="/bevoq-logo.jpg" alt="BEVOQ" className="h-9 w-9 rounded object-cover shadow" />
+          <div>
+            <div className="font-serif text-xl font-semibold tracking-wide">BEVOQ</div>
+            <div className="text-[9px] tracking-[0.2em] uppercase text-white/60">Admin Console</div>
+          </div>
         </Link>
         <nav className="flex-1 py-4">
           {links.map(l => (

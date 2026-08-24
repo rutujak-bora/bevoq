@@ -52,6 +52,17 @@ module.exports = {
           '3': 'hsl(var(--chart-3))',
           '4': 'hsl(var(--chart-4))',
           '5': 'hsl(var(--chart-5))'
+        },
+        // BEVOQ Brand Colors
+        burgundy: {
+          DEFAULT: '#580018',
+          deep: '#3D0010',
+          soft: '#7A0C26',
+        },
+        bevoq: {
+          gold: '#D4AF37',
+          cream: '#FAF6F4',
+          ivory: '#F5EFEA',
         }
       },
       keyframes: {

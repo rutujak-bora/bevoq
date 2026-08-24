@@ -11,7 +11,7 @@ export default function About() {
           </div>
           <div className="aspect-[3/4] overflow-hidden max-w-md mx-auto md:ml-auto shadow-2xl">
             <img
-              src="https://customer-assets.emergentagent.com/job_threads-platform/artifacts/ktu1ka7j_WhatsApp%20Image%202026-07-08%20at%2011.36.24.jpeg"
+              src="/bevoq-logo.jpg"
               alt="BEVOQ brand identity"
               className="w-full h-full object-cover"
             />

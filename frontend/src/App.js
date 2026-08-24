@@ -13,6 +13,7 @@ import Home from "@/pages/Home";
 import Products from "@/pages/Products";
 import ProductDetail from "@/pages/ProductDetail";
 import CollectionPage from "@/pages/CollectionPage";
+import BulkCustom from "@/pages/BulkCustom";
 import About from "@/pages/About";
 import Cart from "@/pages/Cart";
 import Checkout from "@/pages/Checkout";
@@ -57,6 +58,7 @@ export default function App() {
               <Route path="/collections/:slug" element={<StoreRoute><CollectionPage /></StoreRoute>} />
               <Route path="/trending" element={<StoreRoute><Products mode="trending" /></StoreRoute>} />
               <Route path="/best-selling" element={<StoreRoute><Products mode="best-selling" /></StoreRoute>} />
+              <Route path="/bulk-custom" element={<StoreRoute><BulkCustom /></StoreRoute>} />
               <Route path="/about" element={<StoreRoute><About /></StoreRoute>} />
               <Route path="/cart" element={<StoreRoute><Cart /></StoreRoute>} />
               <Route path="/checkout" element={<StoreRoute><Checkout /></StoreRoute>} />

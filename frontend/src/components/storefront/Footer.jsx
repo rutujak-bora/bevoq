@@ -71,14 +71,16 @@ export default function Footer() {
         <div>
           <div className="flex items-center gap-3">
             <img
-              src="https://customer-assets.emergentagent.com/job_threads-platform/artifacts/ktu1ka7j_WhatsApp%20Image%202026-07-08%20at%2011.36.24.jpeg"
-              alt="BEVOQ"
-              className="h-10 w-auto object-cover"
-              style={{ clipPath: "inset(15% 20% 15% 20%)" }}
+              src="/bevoq-logo.jpg"
+              alt="BEVOQ Unisex Fashion"
+              className="h-10 w-10 rounded object-cover shadow"
             />
-            <h4 className="font-serif text-2xl text-gold">BEVOQ<span className="text-white">.</span></h4>
+            <div>
+              <h4 className="font-serif text-2xl text-white font-semibold tracking-wider">BEVOQ</h4>
+              <p className="text-[9px] tracking-[0.25em] uppercase text-white/60 font-medium">Unisex Fashion · Estd 2026</p>
+            </div>
           </div>
-          <p className="text-white/60 text-sm mt-4 leading-relaxed">The Art of Everyday Luxury. Considered fashion, crafted with intention.</p>
+          <p className="text-white/70 text-sm mt-4 leading-relaxed">Considered unisex fashion, crafted with intention and timeless elegance.</p>
           <div className="flex gap-4 mt-6">
             <a href="#" data-testid="social-instagram" className="text-white/70 hover:text-gold"><Instagram size={18} /></a>
             <a href="#" data-testid="social-facebook" className="text-white/70 hover:text-gold"><Facebook size={18} /></a>
@@ -89,10 +91,10 @@ export default function Footer() {
           <div className="overline text-white/80 mb-5">Shop</div>
           <ul className="space-y-3 text-sm text-white/70">
             <li><Link to="/products" className="hover:text-gold">All Products</Link></li>
-            <li><Link to="/collections/women" className="hover:text-gold">Women</Link></li>
-            <li><Link to="/collections/t-shirts" className="hover:text-gold">T-Shirts</Link></li>
-            <li><Link to="/collections/hoodies" className="hover:text-gold">Hoodies</Link></li>
-            <li><Link to="/collections/crop-tops" className="hover:text-gold">Crop Tops</Link></li>
+            <li><Link to="/collections/t-shirts" className="hover:text-gold">T-Shirts (Baggy, Oversize, Printed)</Link></li>
+            <li><Link to="/collections/women" className="hover:text-gold">Women (Western Dress, Crop & Printed Shirts)</Link></li>
+            <li><Link to="/collections/kurta" className="hover:text-gold">Kurta (Men's Traditional)</Link></li>
+            <li><Link to="/bulk-custom" className="hover:text-gold text-gold font-medium">Bulk & Custom Orders</Link></li>
           </ul>
         </div>
         <div>

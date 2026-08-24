@@ -22,11 +22,12 @@ from pydantic import BaseModel, Field, EmailStr, ConfigDict
 # =========================
 # Setup
 # =========================
-mongo_url = os.environ['MONGO_URL']
+mongo_url = os.environ.get('MONGO_URL', 'mongodb+srv://bevoqstore_db_user:687fCFUZYnO2ch7W@bevoq.wiykozh.mongodb.net/?retryWrites=true&w=majority')
+db_name = os.environ.get('DB_NAME', 'bevoq_db')
 client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+db = client[db_name]
 
-JWT_SECRET = os.environ['JWT_SECRET']
+JWT_SECRET = os.environ.get('JWT_SECRET', 'bevoq_super_secure_jwt_secret_key_2025_ecommerce')
 JWT_ALG = "HS256"
 ACCESS_TOKEN_MIN = 60 * 24 * 7  # 7 days
 
@@ -215,6 +216,21 @@ class OrderStatusUpdate(BaseModel):
 
 class NewsletterInput(BaseModel):
     email: EmailStr
+
+
+class CustomRequestInput(BaseModel):
+    name: str
+    email: EmailStr
+    phone: str
+    category: str = "T-Shirts"  # T-Shirts, Hoodies, Sweatshirts, Tote Bags, Caps, Corporate Uniforms, Other
+    quantity: int = 10
+    print_type: str = "Screen Printing"  # Screen Printing, DTF / Digital, Embroidery, Sublimation, Custom Tagging
+    fabric_preference: Optional[str] = "100% Combed Cotton"
+    design_notes: str
+    reference_link: Optional[str] = None
+    image_url: Optional[str] = None
+    expected_delivery: Optional[str] = None
+
 
 
 # =========================
@@ -441,6 +457,51 @@ async def subscribe(inp: NewsletterInput):
     if not existing:
         await db.newsletter.insert_one({"email": inp.email.lower(), "created_at": now_iso()})
     return {"ok": True, "discount_code": "WELCOME10"}
+
+
+# =========================
+# Bulk & Custom Orders / Requests
+# =========================
+@api.post("/custom-requests")
+async def create_custom_request(inp: CustomRequestInput, request: Request):
+    user_id = None
+    try:
+        user = await get_current_user(request)
+        user_id = user.get("id")
+    except Exception:
+        pass
+
+    request_id = str(uuid.uuid4())
+    req_no = "CUST-" + request_id[:8].upper()
+    doc = {
+        "id": request_id,
+        "request_no": req_no,
+        "user_id": user_id,
+        "name": inp.name,
+        "email": inp.email.lower(),
+        "phone": inp.phone,
+        "category": inp.category,
+        "quantity": inp.quantity,
+        "print_type": inp.print_type,
+        "fabric_preference": inp.fabric_preference,
+        "design_notes": inp.design_notes,
+        "reference_link": inp.reference_link,
+        "image_url": inp.image_url,
+        "expected_delivery": inp.expected_delivery,
+        "status": "received",  # received, in_review, quotation_sent, in_production, completed, cancelled
+        "created_at": now_iso(),
+        "updated_at": now_iso(),
+    }
+    await db.custom_requests.insert_one(doc.copy())
+    logger.info(f"[CUSTOM REQUEST] New custom request {req_no} from {inp.email} for {inp.quantity}x {inp.category}")
+    return clean_doc(doc)
+
+
+@api.get("/custom-requests/my")
+async def my_custom_requests(user: dict = Depends(get_current_user)):
+    cursor = db.custom_requests.find({"$or": [{"user_id": user["id"]}, {"email": user["email"].lower()}]}, {"_id": 0}).sort([("created_at", -1)])
+    return await cursor.to_list(100)
+
 
 
 # =========================
@@ -751,99 +812,221 @@ async def admin_payments(admin: dict = Depends(require_admin)):
     return await db.payments.find({}, {"_id": 0}).sort([("created_at", -1)]).to_list(1000)
 
 
+# --- Admin Custom Requests ---
+@api.get("/admin/custom-requests")
+async def admin_custom_requests(admin: dict = Depends(require_admin)):
+    return await db.custom_requests.find({}, {"_id": 0}).sort([("created_at", -1)]).to_list(1000)
+
+
+@api.put("/admin/custom-requests/{request_id}/status")
+async def admin_update_custom_request_status(request_id: str, payload: dict, admin: dict = Depends(require_admin)):
+    new_status = payload.get("status")
+    if not new_status:
+        raise HTTPException(400, "Status is required")
+    await db.custom_requests.update_one(
+        {"id": request_id},
+        {"$set": {"status": new_status, "updated_at": now_iso()}}
+    )
+    return await db.custom_requests.find_one({"id": request_id}, {"_id": 0})
+
+
+
+# =========================
 # =========================
 # Seed data
 # =========================
 SAMPLE_PRODUCTS = [
+    # --- T-Shirts (Baggy, Oversize, Girls & Boys, Printed) ---
     {
-        "title": "Ivory Silk Midi Dress", "category": "Dresses", "price": 3499, "compare_at_price": 4999,
-        "stock": 25, "sizes": ["XS", "S", "M", "L"], "colors": ["Ivory", "Champagne"],
-        "collections": ["women", "trending"], "featured": True, "trending": True, "tags": ["dress", "silk", "midi"],
-        "description": "An effortlessly elegant midi silhouette crafted in liquid silk. Designed for evenings that matter.",
+        "title": "Unisex Acid-Wash Baggy Tee", "category": "T-Shirts", "price": 999, "compare_at_price": 1499,
+        "stock": 60, "sizes": ["S", "M", "L", "XL"], "colors": ["Charcoal", "Vintage Black"],
+        "collections": ["t-shirts", "trending", "best-selling"], "featured": True, "trending": True, "best_selling": True,
+        "tags": ["t-shirt", "baggy", "oversize", "printed", "unisex", "vintage"],
+        "description": "Ultra-relaxed baggy fit tee crafted from 240 GSM heavy combed cotton with mineral acid wash finish.",
+        "images": [
+            "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=1200&q=85",
+            "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=1200&q=85",
+        ],
+    },
+    {
+        "title": "Cyberpunk Oversized Graphic Tee", "category": "T-Shirts", "price": 1199, "compare_at_price": 1699,
+        "stock": 50, "sizes": ["M", "L", "XL"], "colors": ["Black", "Off-White"],
+        "collections": ["t-shirts", "trending"], "featured": True, "trending": True,
+        "tags": ["t-shirt", "oversize", "graphic", "printed", "boys", "girls"],
+        "description": "High-density editorial back print on premium 220 GSM combed cotton. Streetwear drop essential.",
+        "images": [
+            "https://images.unsplash.com/photo-1721637686340-de9f8cebda5a?w=1200&q=85",
+            "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=1200&q=85",
+        ],
+    },
+    {
+        "title": "Girls Boxy Cropped Graphic Tee", "category": "T-Shirts", "price": 899, "compare_at_price": 1299,
+        "stock": 45, "sizes": ["XS", "S", "M", "L"], "colors": ["Sage Green", "Ivory", "Rose"],
+        "collections": ["t-shirts", "women", "best-selling"], "featured": True, "best_selling": True,
+        "tags": ["t-shirt", "girls", "crop", "printed", "boxy"],
+        "description": "Flattering relaxed boxy crop tee with subtle chest typographic print. Lightweight, breathable, effortlessly chic.",
+        "images": [
+            "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=1200&q=85",
+        ],
+    },
+    {
+        "title": "Boys Minimalist Heavyweight Crew Tee", "category": "T-Shirts", "price": 849, "compare_at_price": 1199,
+        "stock": 70, "sizes": ["S", "M", "L", "XL"], "colors": ["White", "Navy", "Burgundy"],
+        "collections": ["t-shirts"], "featured": False,
+        "tags": ["t-shirt", "boys", "basics", "heavyweight"],
+        "description": "The quintessential daily tee. Clean drop shoulder silhouette made with Peruvian pima cotton.",
+        "images": [
+            "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=1200&q=85",
+        ],
+    },
+
+    # --- Women (Western Dress, Crop Shirt, Printed Shirt) ---
+    {
+        "title": "Champagne Silk Western Midi Dress", "category": "Women", "price": 3499, "compare_at_price": 4999,
+        "stock": 25, "sizes": ["XS", "S", "M", "L"], "colors": ["Champagne", "Ivory", "Burgundy"],
+        "collections": ["women", "trending"], "featured": True, "trending": True,
+        "tags": ["women", "western dress", "silk", "dress", "evening"],
+        "description": "An effortlessly elegant western midi silhouette crafted in liquid silk. Perfect for evenings and cocktail soirées.",
         "images": [
             "https://images.unsplash.com/photo-1612336307429-8a898d10e223?w=1200&q=85",
             "https://images.unsplash.com/photo-1610312774212-6bde94e8c0b0?w=1200&q=85",
         ],
     },
     {
-        "title": "Classic White Cotton Tee", "category": "T-Shirts", "price": 899, "compare_at_price": 1299,
-        "stock": 80, "sizes": ["S", "M", "L", "XL"], "colors": ["White", "Black", "Beige"],
-        "collections": ["t-shirts", "best-selling"], "best_selling": True, "featured": True, "tags": ["tee", "cotton", "essentials"],
-        "description": "The elevated basic. 100% combed cotton, tailored fit, made to layer.",
-        "images": [
-            "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=1200&q=85",
-            "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=1200&q=85",
-        ],
-    },
-    {
-        "title": "Champagne Crop Top", "category": "Crop Tops", "price": 1499,
-        "stock": 40, "sizes": ["XS", "S", "M"], "colors": ["Champagne", "Rose"],
-        "collections": ["women", "crop-tops", "trending"], "trending": True, "tags": ["crop", "party"],
-        "description": "A refined crop silhouette in champagne satin — the piece your wardrobe was waiting for.",
+        "title": "Printed Cuban Collar Crop Shirt", "category": "Women", "price": 1499, "compare_at_price": 1999,
+        "stock": 35, "sizes": ["XS", "S", "M", "L"], "colors": ["Floral Abstract", "Monochrome"],
+        "collections": ["women", "trending"], "featured": True, "trending": True,
+        "tags": ["women", "crop shirt", "printed shirt", "western", "resort"],
+        "description": "Relaxed Cuban collar crop shirt in breathable modal blend with exclusive artisanal botanical prints.",
         "images": [
             "https://images.unsplash.com/photo-1762343949052-c086a93fceac?w=1200&q=85",
         ],
     },
     {
-        "title": "Midnight Wool Hoodie", "category": "Hoodies", "price": 2799, "compare_at_price": 3499,
-        "stock": 30, "sizes": ["S", "M", "L", "XL"], "colors": ["Navy", "Black"],
-        "collections": ["hoodies", "best-selling"], "best_selling": True, "tags": ["hoodie", "wool"],
-        "description": "Heavyweight merino-blend hoodie in deep navy. Quiet luxury, all season.",
-        "images": [
-            "https://images.unsplash.com/photo-1760551733073-dd140353506b?w=1200&q=85",
-        ],
-    },
-    {
-        "title": "Oversized Graphic Tee", "category": "T-Shirts", "price": 1199,
-        "stock": 60, "sizes": ["M", "L", "XL"], "colors": ["Black", "Cream"],
-        "collections": ["t-shirts", "trending"], "trending": True, "tags": ["tee", "oversized"],
-        "description": "Streetwear staple with editorial graphic print — relaxed, unbothered, iconic.",
-        "images": [
-            "https://images.unsplash.com/photo-1721637686340-de9f8cebda5a?w=1200&q=85",
-        ],
-    },
-    {
-        "title": "Signature Black Crew", "category": "T-Shirts", "price": 999,
-        "stock": 70, "sizes": ["S", "M", "L", "XL"], "colors": ["Black"],
-        "collections": ["t-shirts", "best-selling"], "best_selling": True, "tags": ["tee", "black"],
-        "description": "The perfect black tee. Cut from Peruvian pima cotton with a soft, drapey hand.",
-        "images": [
-            "https://images.unsplash.com/photo-1627225925683-1da7021732ea?w=1200&q=85",
-        ],
-    },
-    {
-        "title": "Rose Chiffon Blouse", "category": "Tops", "price": 1899,
-        "stock": 22, "sizes": ["XS", "S", "M", "L"], "colors": ["Rose", "White"],
-        "collections": ["women", "trending"], "trending": True, "featured": True, "tags": ["blouse", "chiffon"],
-        "description": "A soft, flowing blouse in blush chiffon. Weightless elegance, wear it anywhere.",
+        "title": "Abstract Geometric Printed Western Shirt", "category": "Women", "price": 1799, "compare_at_price": 2499,
+        "stock": 30, "sizes": ["S", "M", "L"], "colors": ["Burgundy / Gold", "Black / Cream"],
+        "collections": ["women", "best-selling"], "featured": True, "best_selling": True,
+        "tags": ["women", "printed shirt", "western", "button-down"],
+        "description": "Fluid satin finish button-down western shirt featuring modern abstract geometry. Versatile styling options.",
         "images": [
             "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1200&q=85",
         ],
     },
     {
-        "title": "Camel Wool Coat", "category": "Outerwear", "price": 6499, "compare_at_price": 8499,
-        "stock": 12, "sizes": ["S", "M", "L"], "colors": ["Camel", "Black"],
-        "collections": ["women", "outerwear"], "featured": True, "tags": ["coat", "wool", "outerwear"],
-        "description": "A timeless investment coat in Italian wool. Structured shoulders, minimalist lines.",
+        "title": "Emerald Velvet Western Slit Dress", "category": "Women", "price": 3899, "compare_at_price": 5499,
+        "stock": 20, "sizes": ["S", "M", "L"], "colors": ["Emerald", "Midnight Blue"],
+        "collections": ["women"], "featured": False,
+        "tags": ["women", "western dress", "velvet", "evening"],
+        "description": "Plush micro-velvet western gown with side slit and structured corset bodice.",
         "images": [
             "https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=1200&q=85",
         ],
     },
+
+    # --- Kurta (Men's Traditional) ---
+    {
+        "title": "Royal Raw Silk Embroidered Men's Kurta", "category": "Kurta", "price": 2499, "compare_at_price": 3299,
+        "stock": 35, "sizes": ["S", "M", "L", "XL"], "colors": ["Burgundy Gold", "Ivory Cream", "Midnight Blue"],
+        "collections": ["kurta", "trending", "best-selling"], "featured": True, "trending": True, "best_selling": True,
+        "tags": ["kurta", "men", "traditional", "ethnic", "embroidery", "festive"],
+        "description": "Rich raw silk men's traditional kurta with intricate zari thread neckline and mandarin collar for weddings & festivals.",
+        "images": [
+            "/images/kurta/royal_silk_kurta.jpg",
+        ],
+    },
+    {
+        "title": "Handcrafted Chikankari Cotton Men's Kurta", "category": "Kurta", "price": 1899, "compare_at_price": 2499,
+        "stock": 40, "sizes": ["S", "M", "L", "XL"], "colors": ["White", "Ivory", "Light Blue"],
+        "collections": ["kurta", "best-selling"], "featured": True, "best_selling": True,
+        "tags": ["kurta", "men", "traditional", "chikankari", "cotton", "lucknowi"],
+        "description": "Pure breathable cotton men's traditional kurta with hand-embroidered shadow work chikankari details. Perfect for Eid, weddings & festivals.",
+        "images": [
+            "/images/kurta/chikankari_kurta.jpg",
+        ],
+    },
+    {
+        "title": "Festive Jacquard Men's Short Kurta", "category": "Kurta", "price": 1599, "compare_at_price": 2199,
+        "stock": 30, "sizes": ["S", "M", "L", "XL"], "colors": ["Mustard Gold", "Wine Red", "Forest Green"],
+        "collections": ["kurta"], "featured": False,
+        "tags": ["kurta", "men", "traditional", "short kurta", "jacquard", "fusion"],
+        "description": "Modern fusion men's short kurta woven in festive jacquard fabric, ideal with slim denims or traditional churidars.",
+        "images": [
+            "/images/kurta/jacquard_short_kurta.jpg",
+        ],
+    },
+    {
+        "title": "Bandhgala Nehru Collar Men's Kurta Set", "category": "Kurta", "price": 3299, "compare_at_price": 4499,
+        "stock": 25, "sizes": ["S", "M", "L", "XL", "XXL"], "colors": ["Navy Blue", "Charcoal Grey", "Maroon"],
+        "collections": ["kurta", "trending"], "featured": True, "trending": True,
+        "tags": ["kurta", "men", "bandhgala", "nehru collar", "ethnic", "wedding", "set"],
+        "description": "Premium Bandhgala-style Nehru collar kurta with matching churidar bottoms. Ideal for weddings, receptions & sangeet nights.",
+        "images": [
+            "/images/kurta/bandhgala_kurta_set.jpg",
+        ],
+    },
+    {
+        "title": "Angrakha Style Linen Men's Kurta", "category": "Kurta", "price": 2199, "compare_at_price": 2899,
+        "stock": 20, "sizes": ["S", "M", "L", "XL"], "colors": ["Beige", "Dusty Rose", "Sage Green"],
+        "collections": ["kurta"], "featured": False,
+        "tags": ["kurta", "men", "angrakha", "linen", "casual", "ethnic"],
+        "description": "Relaxed Angrakha-style wrap kurta in premium linen blend with minimalist tassels. Comfortable everyday ethnic wear for men.",
+        "images": [
+            "/images/kurta/linen_angrakha_kurta.jpg",
+        ],
+    },
+
+    # --- Custom & Crafted Items ---
+    {
+        "title": "Custom Bespoke Batch Printed Hoodie", "category": "Custom & Crafted", "price": 2899, "compare_at_price": 3699,
+        "stock": 100, "sizes": ["S", "M", "L", "XL"], "colors": ["Custom Dye", "Jet Black", "Burgundy"],
+        "collections": ["custom-crafted", "trending"], "featured": True, "trending": True,
+        "tags": ["custom", "crafted", "hoodie", "embroidery", "puff-print"],
+        "description": "380 GSM Heavy French Terry crafted with custom client artwork, 3D embroidery and silicone aglets.",
+        "images": [
+            "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=1200&q=85",
+        ],
+    },
+    {
+        "title": "Custom Crafted Streetwear Oversize Tee", "category": "Custom & Crafted", "price": 1299, "compare_at_price": 1799,
+        "stock": 200, "sizes": ["S", "M", "L", "XL"], "colors": ["Custom Colors", "Vintage Washed"],
+        "collections": ["custom-crafted", "best-selling"], "featured": True, "best_selling": True,
+        "tags": ["custom", "crafted", "t-shirt", "screen-printing", "dtf"],
+        "description": "Customized cloth printing with tailor-made neckline labels, custom sizing tags, and personalized packaging.",
+        "images": [
+            "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=1200&q=85",
+        ],
+    }
 ]
 
 SAMPLE_COLLECTIONS = [
-    {"title": "Women", "slug": "women", "description": "Curated pieces for the modern woman.",
-     "banner_image": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1600&q=85"},
-    {"title": "T-Shirts", "slug": "t-shirts", "description": "Elevated everyday essentials.",
-     "banner_image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=1600&q=85"},
-    {"title": "Hoodies", "slug": "hoodies", "description": "Quiet-luxury warmth.",
-     "banner_image": "https://images.unsplash.com/photo-1760551733073-dd140353506b?w=1600&q=85"},
-    {"title": "Crop Tops", "slug": "crop-tops", "description": "Refined silhouettes for statement moments.",
-     "banner_image": "https://images.unsplash.com/photo-1762343949052-c086a93fceac?w=1600&q=85"},
+    {
+        "title": "T-Shirts", 
+        "slug": "t-shirts", 
+        "description": "Baggy, Oversize, Girls & Boys Graphic and Printed T-Shirts.",
+        "banner_image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=1600&q=85"
+    },
+    {
+        "title": "Women", 
+        "slug": "women", 
+        "description": "Western Dresses, Modern Crop Shirts & Statement Printed Shirts.",
+        "banner_image": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1600&q=85"
+    },
+    {
+        "title": "Kurta", 
+        "slug": "kurta", 
+        "description": "Exclusive Men's Traditional, Festive Silk & Handcrafted Ethnic Kurta.",
+        "banner_image": "/images/kurta/kurta_banner.jpg"
+    },
+    {
+        "title": "Custom & Crafted", 
+        "slug": "custom-crafted", 
+        "description": "Personalized Custom Garment Printing, Bespoke Embroidery & Low-MOQ Manufacturing.",
+        "banner_image": "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=1600&q=85"
+    },
     {"title": "Trending", "slug": "trending", "description": "What's moving this season.", "banner_image": None},
     {"title": "Best Selling", "slug": "best-selling", "description": "Customer favourites.", "banner_image": None},
-    {"title": "Outerwear", "slug": "outerwear", "description": "Layers with intention.", "banner_image": None},
 ]
+
 
 
 async def seed():

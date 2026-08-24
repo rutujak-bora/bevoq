@@ -1,18 +1,28 @@
 import React, { useState } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
-import { ShoppingBag, Heart, Search, User, Menu, X, Package } from "lucide-react";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
+import { ShoppingBag, Heart, Search, User, Menu, X, Package, ChevronDown } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { useAuth } from "@/context/AuthContext";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 
-const nav = [
-  { label: "Home", to: "/" },
-  { label: "Trending", to: "/trending" },
-  { label: "Best Selling", to: "/best-selling" },
-  { label: "All Products", to: "/products" },
-  { label: "About Us", to: "/about" },
+const collectionCategories = [
+  { 
+    label: "T-Shirt", 
+    to: "/collections/t-shirts", 
+    description: "Baggy, Oversize, Girls & Boys, Printed Tees" 
+  },
+  { 
+    label: "Women", 
+    to: "/collections/women", 
+    description: "Western Dresses, Crop Shirts, Printed Shirts" 
+  },
+  { 
+    label: "Kurta (Men)", 
+    to: "/collections/kurta", 
+    description: "Exclusive Men's & Boys Traditional Festive Wear" 
+  },
 ];
 
 export default function Header() {
@@ -21,7 +31,13 @@ export default function Header() {
   const { user, logout } = useAuth();
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [collectionDropdownOpen, setCollectionDropdownOpen] = useState(false);
+  const [mobileCollectionOpen, setMobileCollectionOpen] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const isCollectionActive = location.pathname.startsWith("/collections/");
 
   const submit = (e) => {
     e.preventDefault();
@@ -33,24 +49,96 @@ export default function Header() {
     <>
       {/* Announcement bar */}
       <div className="bg-navy text-white text-[11px] tracking-[0.25em] uppercase py-2 text-center font-medium" data-testid="announcement-bar">
-        Free Shipping on Orders Above ₹999 &nbsp;·&nbsp; Use Code <span className="text-gold">WELCOME10</span> for 10% Off
+        Free Shipping on Orders Above ₹999 &nbsp;·&nbsp; Use Code <span className="text-gold font-bold">WELCOME10</span> for 10% Off &nbsp;·&nbsp; Unisex Fashion · Estd 2026
       </div>
 
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/85 border-b border-black/5" data-testid="site-header">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-5 flex items-center justify-between gap-6">
           {/* Mobile menu */}
-          <Sheet>
+          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetTrigger asChild>
               <button className="md:hidden" data-testid="mobile-menu-btn"><Menu size={22} strokeWidth={1.5} /></button>
             </SheetTrigger>
-            <SheetContent side="left" className="bg-cream">
-              <nav className="flex flex-col gap-6 mt-10">
-                {nav.map(n => (
-                  <NavLink key={n.to} to={n.to} className="text-xl font-serif" data-testid={`mobile-nav-${n.label.toLowerCase().replace(/\s/g,'-')}`}>{n.label}</NavLink>
-                ))}
-                <Link to="/wishlist" className="text-xl font-serif">Wishlist</Link>
-                <Link to="/orders" className="text-xl font-serif">Orders</Link>
-                {!user && <Link to="/login" className="text-xl font-serif">Login / Register</Link>}
+            <SheetContent side="left" className="bg-cream overflow-y-auto">
+              <nav className="flex flex-col gap-5 mt-8">
+                <NavLink 
+                  to="/" 
+                  onClick={() => setMobileMenuOpen(false)} 
+                  className="text-xl font-serif text-navy hover:text-gold" 
+                  data-testid="mobile-nav-home"
+                >
+                  Home
+                </NavLink>
+
+                {/* Mobile Collection Group */}
+                <div className="border-y border-navy/10 py-3">
+                  <button 
+                    onClick={() => setMobileCollectionOpen(!mobileCollectionOpen)}
+                    className="flex items-center justify-between w-full text-xl font-serif text-navy"
+                  >
+                    <span>Collection</span>
+                    <ChevronDown size={18} className={`transition-transform duration-200 ${mobileCollectionOpen ? "rotate-180 text-gold" : "text-navy/60"}`} />
+                  </button>
+
+                  {mobileCollectionOpen && (
+                    <div className="flex flex-col gap-3 pl-4 mt-3 border-l-2 border-gold/40">
+                      {collectionCategories.map((c) => (
+                        <NavLink
+                          key={c.to}
+                          to={c.to}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={({ isActive }) => `text-base ${isActive ? "text-gold font-medium" : "text-navy/80 hover:text-gold"}`}
+                          data-testid={`mobile-subnav-${c.label.toLowerCase()}`}
+                        >
+                          <div>{c.label}</div>
+                          <div className="text-[11px] text-navy/50">{c.description}</div>
+                        </NavLink>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <NavLink 
+                  to="/trending" 
+                  onClick={() => setMobileMenuOpen(false)} 
+                  className="text-xl font-serif text-navy hover:text-gold" 
+                  data-testid="mobile-nav-trending"
+                >
+                  Trending
+                </NavLink>
+
+                <NavLink 
+                  to="/best-selling" 
+                  onClick={() => setMobileMenuOpen(false)} 
+                  className="text-xl font-serif text-navy hover:text-gold" 
+                  data-testid="mobile-nav-best-selling"
+                >
+                  Best Selling
+                </NavLink>
+
+                <NavLink 
+                  to="/products" 
+                  onClick={() => setMobileMenuOpen(false)} 
+                  className="text-xl font-serif text-navy hover:text-gold" 
+                  data-testid="mobile-nav-all-products"
+                >
+                  All Products
+                </NavLink>
+
+                <NavLink 
+                  to="/bulk-custom" 
+                  onClick={() => setMobileMenuOpen(false)} 
+                  className="text-xl font-serif text-burgundy font-medium hover:text-gold" 
+                  data-testid="mobile-nav-bulk-custom"
+                >
+                  Bulk & Custom
+                </NavLink>
+
+                <div className="border-t border-navy/10 pt-4 flex flex-col gap-4">
+                  <Link to="/wishlist" onClick={() => setMobileMenuOpen(false)} className="text-lg font-serif">Wishlist</Link>
+                  <Link to="/orders" onClick={() => setMobileMenuOpen(false)} className="text-lg font-serif">Orders</Link>
+                  {!user && <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="text-lg font-serif">Login / Register</Link>}
+                </div>
               </nav>
             </SheetContent>
           </Sheet>
@@ -58,28 +146,102 @@ export default function Header() {
           {/* Logo */}
           <Link to="/" className="flex-1 md:flex-none flex items-center gap-3 justify-center md:justify-start" data-testid="logo-link">
             <img
-              src="https://customer-assets.emergentagent.com/job_threads-platform/artifacts/ktu1ka7j_WhatsApp%20Image%202026-07-08%20at%2011.36.24.jpeg"
-              alt="BEVOQ"
-              className="h-12 md:h-14 w-auto object-cover object-center"
-              style={{ clipPath: "inset(15% 20% 15% 20%)" }}
+              src="/bevoq-logo.jpg"
+              alt="BEVOQ Unisex Fashion"
+              className="h-11 md:h-13 w-11 md:w-13 rounded shadow-sm object-cover"
             />
             <div className="text-left">
-              <h1 className="font-serif text-2xl md:text-3xl tracking-[0.15em] text-navy font-medium leading-none">BEVOQ<span className="text-gold">.</span></h1>
-              <p className="hidden md:block text-[10px] tracking-[0.3em] uppercase text-navy/60 mt-1">The Art of Everyday Luxury</p>
+              <h1 className="font-serif text-2xl md:text-3xl tracking-[0.18em] text-navy font-semibold leading-none">BEVOQ</h1>
+              <p className="hidden md:block text-[9px] tracking-[0.28em] uppercase text-navy/70 mt-1 font-medium">Unisex Fashion · Estd 2026</p>
             </div>
           </Link>
 
           {/* Nav (desktop) */}
-          <nav className="hidden md:flex items-center gap-8">
-            {nav.map(n => (
-              <NavLink
-                key={n.to} to={n.to}
-                data-testid={`nav-${n.label.toLowerCase().replace(/\s/g,'-')}`}
-                className={({isActive}) => `text-[13px] tracking-[0.15em] uppercase font-medium gold-underline ${isActive ? "text-gold" : "text-navy hover:text-gold"}`}
+          <nav className="hidden md:flex items-center gap-7 lg:gap-8">
+            <NavLink
+              to="/"
+              data-testid="nav-home"
+              className={({isActive}) => `text-[13px] tracking-[0.15em] uppercase font-medium gold-underline ${isActive ? "text-gold" : "text-navy hover:text-gold"}`}
+            >
+              Home
+            </NavLink>
+
+            {/* Collection Dropdown */}
+            <div 
+              className="relative group py-2"
+              onMouseEnter={() => setCollectionDropdownOpen(true)}
+              onMouseLeave={() => setCollectionDropdownOpen(false)}
+            >
+              <button
+                type="button"
+                className={`text-[13px] tracking-[0.15em] uppercase font-medium flex items-center gap-1.5 transition-colors ${isCollectionActive ? "text-gold" : "text-navy hover:text-gold"}`}
+                data-testid="nav-collection"
               >
-                {n.label}
-              </NavLink>
-            ))}
+                Collection <ChevronDown size={14} className={`transition-transform duration-200 ${collectionDropdownOpen ? "rotate-180 text-gold" : ""}`} />
+              </button>
+
+              <div className="absolute left-0 top-full pt-2 w-72 hidden group-hover:block transition-all z-50">
+                <div className="bg-white border border-black/10 shadow-2xl p-3 space-y-1">
+                  <div className="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-navy/50 border-b border-black/5">
+                    Brand Categories
+                  </div>
+                  {collectionCategories.map((item) => (
+                    <Link
+                      key={item.to}
+                      to={item.to}
+                      className="block px-3 py-2.5 rounded-sm hover:bg-cream transition-colors group/item"
+                      data-testid={`dropdown-${item.label.toLowerCase()}`}
+                    >
+                      <div className="text-sm font-serif font-bold text-navy group-hover/item:text-burgundy flex items-center justify-between">
+                        <span>{item.label}</span>
+                        <span className="text-[10px] uppercase font-sans text-gold font-normal tracking-wider">Explore →</span>
+                      </div>
+                      <div className="text-xs text-navy/60 mt-0.5 leading-snug">
+                        {item.description}
+                      </div>
+                    </Link>
+                  ))}
+                  <div className="border-t border-black/5 pt-1.5 px-3">
+                    <Link to="/products" className="text-[11px] uppercase tracking-wider text-burgundy hover:text-gold font-semibold flex items-center justify-between">
+                      <span>All Collections</span>
+                      <span>→</span>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <NavLink
+              to="/trending"
+              data-testid="nav-trending"
+              className={({isActive}) => `text-[13px] tracking-[0.15em] uppercase font-medium gold-underline ${isActive ? "text-gold" : "text-navy hover:text-gold"}`}
+            >
+              Trending
+            </NavLink>
+
+            <NavLink
+              to="/best-selling"
+              data-testid="nav-best-selling"
+              className={({isActive}) => `text-[13px] tracking-[0.15em] uppercase font-medium gold-underline ${isActive ? "text-gold" : "text-navy hover:text-gold"}`}
+            >
+              Best Selling
+            </NavLink>
+
+            <NavLink
+              to="/products"
+              data-testid="nav-all-products"
+              className={({isActive}) => `text-[13px] tracking-[0.15em] uppercase font-medium gold-underline ${isActive ? "text-gold" : "text-navy hover:text-gold"}`}
+            >
+              All Products
+            </NavLink>
+
+            <NavLink
+              to="/bulk-custom"
+              data-testid="nav-bulk-custom"
+              className={({isActive}) => `text-[13px] tracking-[0.15em] uppercase font-medium gold-underline ${isActive ? "text-gold" : "text-navy hover:text-gold"}`}
+            >
+              Bulk & Custom
+            </NavLink>
           </nav>
 
           {/* Actions */}
@@ -130,7 +292,7 @@ export default function Header() {
             </form>
             <div className="max-w-[1400px] mx-auto px-6 md:px-10 pb-6 flex flex-wrap gap-2 text-sm">
               <span className="text-navy/60 uppercase tracking-wider text-[11px]">Trending:</span>
-              {["t-shirt", "dress", "crop top", "hoodie"].map(t => (
+              {["oversized t-shirt", "baggy tee", "western dress", "crop shirt", "printed shirt", "men's kurta", "custom design"].map(t => (
                 <button key={t} onClick={()=>{setQ(t); navigate(`/products?search=${t}`); setOpen(false);}} className="text-navy hover:text-gold underline underline-offset-4" data-testid={`trending-search-${t.replace(/\s/g,'-')}`}>{t}</button>
               ))}
             </div>

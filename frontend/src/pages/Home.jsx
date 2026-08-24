@@ -15,7 +15,10 @@ export default function Home() {
     api.get("/collections").then(r => setCollections(r.data)).catch(()=>{});
   }, []);
 
-  const topCollections = collections.filter(c => ["women","t-shirts","hoodies","crop-tops"].includes(c.slug));
+  const brandOrder = ["t-shirts", "women", "kurta", "custom-crafted"];
+  const topCollections = collections
+    .filter(c => brandOrder.includes(c.slug))
+    .sort((a, b) => brandOrder.indexOf(a.slug) - brandOrder.indexOf(b.slug));
 
   return (
     <div>
@@ -25,12 +28,12 @@ export default function Home() {
         <div className="absolute inset-0 hero-overlay" />
         <div className="relative z-10 h-full max-w-[1400px] mx-auto px-6 md:px-10 flex items-end pb-24">
           <div className="text-white max-w-2xl fade-up">
-            <p className="overline text-gold mb-6">Season 01 · Everyday Luxury</p>
-            <h1 className="font-serif text-5xl md:text-7xl leading-[0.95] font-light">The Art of<br/><em className="text-gold not-italic">Everyday</em> Luxury.</h1>
-            <p className="mt-6 text-white/80 text-lg max-w-md">Considered fashion for the modern wardrobe. Discover the new season, shaped by craft.</p>
+            <p className="overline text-gold mb-6">Season 2026 · Unisex Fashion</p>
+            <h1 className="font-serif text-5xl md:text-7xl leading-[0.95] font-light">Fashion for<br/><em className="text-gold not-italic">Everyone,</em><br/>Every Day.</h1>
+            <p className="mt-6 text-white/80 text-lg max-w-md">Unisex fashion for the modern wardrobe. Discover BEVOQ — where style has no boundaries.</p>
             <div className="flex flex-wrap gap-4 mt-10">
-              <Link to="/products" className="btn-primary bg-gold border-gold text-navy hover:bg-white hover:border-white" data-testid="hero-shop-btn">Shop Collection</Link>
-              <Link to="/collections/women" className="btn-outline border-white text-white hover:bg-white hover:text-navy" data-testid="hero-explore-btn">Explore Women</Link>
+              <Link to="/products" className="btn-primary" data-testid="hero-shop-btn">Shop Collection</Link>
+              <Link to="/about" className="btn-outline border-white text-white hover:bg-white hover:text-burgundy" data-testid="hero-explore-btn">Our Story</Link>
             </div>
           </div>
         </div>
@@ -80,9 +83,9 @@ export default function Home() {
         <div className="max-w-[1400px] mx-auto px-6 md:px-10 grid md:grid-cols-2 gap-16 items-center">
           <div>
             <p className="overline text-gold">Our Philosophy</p>
-            <h2 className="serif-display text-5xl md:text-6xl mt-4 leading-[1.05]">Luxury,<br/>reimagined for<br/><em className="text-gold not-italic">every day</em>.</h2>
-            <p className="text-white/70 mt-6 leading-relaxed max-w-md">BEVOQ was built on a simple idea: everyday can be extraordinary. Our pieces are crafted from the finest materials, designed to be worn — and loved — again and again.</p>
-            <Link to="/about" className="btn-outline border-gold text-gold hover:bg-gold hover:text-navy mt-8 inline-block">Our Story</Link>
+            <h2 className="serif-display text-5xl md:text-6xl mt-4 leading-[1.05]">Fashion<br/>beyond<br/><em className="text-gold not-italic">boundaries</em>.</h2>
+            <p className="text-white/70 mt-6 leading-relaxed max-w-md">BEVOQ was built on a simple idea: style belongs to everyone. Our unisex pieces are crafted from the finest materials, designed to be worn — and loved — by anyone, anywhere.</p>
+            <Link to="/about" className="btn-outline border-white text-white hover:bg-white hover:text-navy mt-8 inline-block">Our Story</Link>
           </div>
           <div className="aspect-[4/5] overflow-hidden">
             <img src="https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=1200&q=85" alt="Editorial" className="w-full h-full object-cover" />
