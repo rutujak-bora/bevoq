@@ -165,6 +165,15 @@ export default function Header() {
                   Bulk & Custom
                 </NavLink>
 
+                <NavLink 
+                  to="/about" 
+                  onClick={() => setMobileMenuOpen(false)} 
+                  className="text-xl font-serif text-navy hover:text-gold" 
+                  data-testid="mobile-nav-about-us"
+                >
+                  About Us
+                </NavLink>
+
                 <div className="border-t border-navy/10 pt-4 flex flex-col gap-4">
                   <Link to="/wishlist" onClick={() => setMobileMenuOpen(false)} className="text-lg font-serif">Wishlist</Link>
                   <Link to="/orders" onClick={() => setMobileMenuOpen(false)} className="text-lg font-serif">Orders</Link>
@@ -174,21 +183,31 @@ export default function Header() {
             </SheetContent>
           </Sheet>
 
-          {/* Logo */}
-          <Link to="/" className="flex-1 md:flex-none flex items-center gap-3 justify-center md:justify-start" data-testid="logo-link">
-            <img
-              src="/bevoq-logo.jpg"
-              alt="BEVOQ Unisex Fashion"
-              className="h-11 md:h-13 w-11 md:w-13 rounded shadow-sm object-cover"
-            />
+          {/* Logo with Luxury Animation */}
+          <Link to="/" className="flex-1 md:flex-none flex items-center gap-3 justify-center md:justify-start group" data-testid="logo-link">
+            <div className="relative overflow-hidden rounded-lg p-0.5 border border-gold/30 group-hover:border-gold animate-logo-glow transition-all duration-300 shadow-sm bg-white">
+              <img
+                src="/bevoq-logo.jpg"
+                alt="BEVOQ Unisex Fashion"
+                className="h-11 md:h-12 w-11 md:w-12 rounded-md object-cover transform group-hover:scale-105 transition-transform duration-500"
+              />
+              {/* Shimmer reflection animation overlay */}
+              <div className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/45 to-transparent pointer-events-none animate-logo-shine" />
+            </div>
             <div className="text-left">
-              <h1 className="font-serif text-2xl md:text-3xl tracking-[0.18em] text-navy font-semibold leading-none">BEVOQ</h1>
-              <p className="hidden md:block text-[9px] tracking-[0.28em] uppercase text-navy/70 mt-1 font-medium">Unisex Fashion · Estd 2026</p>
+              <h1 className="font-serif text-2xl md:text-3xl tracking-[0.18em] group-hover:tracking-[0.22em] text-navy font-semibold leading-none transition-all duration-300">
+                BEVOQ
+              </h1>
+              <p className="hidden md:flex items-center gap-1.5 text-[9px] tracking-[0.28em] uppercase text-navy/70 mt-1 font-medium">
+                <span>Unisex Fashion</span>
+                <span className="text-gold">·</span>
+                <span>Estd 2026</span>
+              </p>
             </div>
           </Link>
 
           {/* Nav (desktop) */}
-          <nav className="hidden md:flex items-center gap-7 lg:gap-8">
+          <nav className="hidden md:flex items-center gap-6 lg:gap-7">
             <NavLink
               to="/"
               data-testid="nav-home"
@@ -272,6 +291,14 @@ export default function Header() {
               className={({isActive}) => `text-[13px] tracking-[0.15em] uppercase font-medium gold-underline ${isActive ? "text-gold" : "text-navy hover:text-gold"}`}
             >
               Bulk & Custom
+            </NavLink>
+
+            <NavLink
+              to="/about"
+              data-testid="nav-about-us"
+              className={({isActive}) => `text-[13px] tracking-[0.15em] uppercase font-medium gold-underline ${isActive ? "text-gold" : "text-navy hover:text-gold"}`}
+            >
+              About Us
             </NavLink>
           </nav>
 
