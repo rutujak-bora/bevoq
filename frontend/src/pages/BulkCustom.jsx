@@ -178,7 +178,7 @@ export default function BulkCustom() {
     const text = encodeURIComponent(
       `Hello BEVOQ Team! I would like to inquire about Bulk & Custom Apparel Printing.\nCategory: ${form.category}\nEstimated Quantity: ${form.quantity} pcs\nName: ${form.name || "Customer"}`
     );
-    window.open(`https://wa.me/919999999999?text=${text}`, "_blank");
+    window.open(`https://wa.me/919604508513?text=${text}`, "_blank");
   };
 
   return (
@@ -387,9 +387,9 @@ export default function BulkCustom() {
                 <button
                   type="button"
                   onClick={openWhatsApp}
-                  className="w-full bg-emerald-700 hover:bg-emerald-600 text-white font-medium py-3 px-4 text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-colors rounded-sm"
+                  className="w-full bg-emerald-700 hover:bg-emerald-600 text-white font-medium py-3 px-4 text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-colors rounded-sm shadow-md"
                 >
-                  <MessageSquare size={16} /> Chat on WhatsApp (+91 99999 99999)
+                  <MessageSquare size={16} /> Chat on WhatsApp (+91 96045 08513)
                 </button>
               </div>
             </div>
@@ -414,6 +414,14 @@ export default function BulkCustom() {
                     Our team will send you a digital mockup and price quotation to <strong>{submittedRequest.email}</strong> within 24 hours.
                   </p>
                   <div className="pt-4 flex flex-wrap justify-center gap-4">
+                    <a
+                      href={`https://wa.me/919604508513?text=${encodeURIComponent(`Hi BEVOQ Team! I just submitted a custom order request (${submittedRequest.request_no}). I'd like to share artwork details.`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white px-4 py-2.5 text-xs uppercase tracking-wider font-semibold rounded shadow-md"
+                    >
+                      <MessageSquare size={15} /> Chat with Specialist on WhatsApp
+                    </a>
                     <Button
                       onClick={() => {
                         setSubmittedRequest(null);
