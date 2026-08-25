@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Truck, ShieldCheck, RotateCcw, Headphones, Instagram, Facebook, Twitter } from "lucide-react";
+import { Truck, ShieldCheck, RotateCcw, Headphones, Instagram, Facebook, Twitter, MessageCircle, Phone, Mail } from "lucide-react";
 import api from "@/lib/api";
 import { toast } from "sonner";
 
@@ -82,9 +82,17 @@ export default function Footer() {
           </div>
           <p className="text-white/70 text-sm mt-4 leading-relaxed">Considered unisex fashion, crafted with intention and timeless elegance.</p>
           <div className="flex gap-4 mt-6">
-            <a href="#" data-testid="social-instagram" className="text-white/70 hover:text-gold"><Instagram size={18} /></a>
-            <a href="#" data-testid="social-facebook" className="text-white/70 hover:text-gold"><Facebook size={18} /></a>
-            <a href="#" data-testid="social-twitter" className="text-white/70 hover:text-gold"><Twitter size={18} /></a>
+            <a 
+              href="https://www.instagram.com/bevoqstore?igsi=MXZqaHloNGFkZnl4NQ==" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              data-testid="social-instagram" 
+              className="text-white/70 hover:text-gold transition-colors flex items-center gap-1.5"
+              aria-label="Instagram @bevoqstore"
+            >
+              <Instagram size={19} />
+              <span className="text-xs">@bevoqstore</span>
+            </a>
           </div>
         </div>
         <div>
@@ -98,13 +106,43 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <div className="overline text-white/80 mb-5">Support</div>
+          <div className="overline text-white/80 mb-5">Support & Help</div>
           <ul className="space-y-3 text-sm text-white/70">
+            <li>
+              <a 
+                href="https://wa.me/919604508513?text=Hi%20BEVOQ,%20I%20have%20a%20query%20about%20an%20outfit/order" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:text-gold flex items-center gap-2 text-white/90"
+              >
+                <MessageCircle size={15} className="text-[#25D366]" /> 
+                <span>WhatsApp: <strong>+91 96045 08513</strong></span>
+              </a>
+            </li>
+            <li>
+              <a href="tel:+919604508513" className="hover:text-gold flex items-center gap-2 text-white/90">
+                <Phone size={15} className="text-gold" />
+                <span>Call: <strong>+91 96045 08513</strong></span>
+              </a>
+            </li>
+            <li>
+              <a href="mailto:support@bevoq.com" className="hover:text-gold flex items-center gap-2">
+                <Mail size={15} className="text-gold/80" />
+                <span>support@bevoq.com</span>
+              </a>
+            </li>
+            <li>
+              <a 
+                href="https://www.instagram.com/bevoqstore?igsi=MXZqaHloNGFkZnl4NQ==" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:text-gold flex items-center gap-2"
+              >
+                <Instagram size={15} className="text-gold/80" />
+                <span>Instagram: @bevoqstore</span>
+              </a>
+            </li>
             <li><Link to="/about" className="hover:text-gold">About Us</Link></li>
-            <li><a href="mailto:support@bevoq.com" className="hover:text-gold">support@bevoq.com</a></li>
-            <li><a href="#" className="hover:text-gold">Delivery Charges</a></li>
-            <li><a href="#" className="hover:text-gold">Return Policy</a></li>
-            <li><a href="#" className="hover:text-gold">FAQs</a></li>
           </ul>
         </div>
         <div>

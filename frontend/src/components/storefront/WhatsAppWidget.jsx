@@ -1,10 +1,10 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { MessageCircle, X } from "lucide-react";
 
 export default function WhatsAppWidget() {
   const [tooltipOpen, setTooltipOpen] = useState(true);
 
-  const phoneNumber = "919876543210";
+  const phoneNumber = "919604508513";
   const defaultMessage = encodeURIComponent("Hi BEVOQ! I'm browsing your website and have a question regarding an outfit/order.");
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${defaultMessage}`;
 
