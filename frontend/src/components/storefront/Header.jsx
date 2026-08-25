@@ -83,247 +83,175 @@ export default function Header() {
         </div>
       </div>
 
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/85 border-b border-black/5" data-testid="site-header">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-5 flex items-center justify-between gap-6">
-          {/* Mobile menu */}
-          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-            <SheetTrigger asChild>
-              <button className="md:hidden" data-testid="mobile-menu-btn"><Menu size={22} strokeWidth={1.5} /></button>
-            </SheetTrigger>
-            <SheetContent side="left" className="bg-cream overflow-y-auto">
-              <nav className="flex flex-col gap-5 mt-8">
-                <NavLink 
-                  to="/" 
-                  onClick={() => setMobileMenuOpen(false)} 
-                  className="text-xl font-serif text-navy hover:text-gold" 
-                  data-testid="mobile-nav-home"
-                >
-                  Home
-                </NavLink>
-
-                {/* Mobile Collection Group */}
-                <div className="border-y border-navy/10 py-3">
-                  <button 
-                    onClick={() => setMobileCollectionOpen(!mobileCollectionOpen)}
-                    className="flex items-center justify-between w-full text-xl font-serif text-navy"
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/95 border-b border-black/5 shadow-xs" data-testid="site-header">
+        {/* Tier 1: Main Brand Bar (Logo & Tagline Centered) */}
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 pt-4 pb-3 flex items-center justify-between gap-4">
+          {/* Left Action / Mobile Trigger */}
+          <div className="flex items-center gap-3 w-1/4">
+            {/* Mobile menu trigger */}
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <button className="md:hidden p-1 text-navy" data-testid="mobile-menu-btn" aria-label="Open mobile menu">
+                  <Menu size={24} strokeWidth={1.5} />
+                </button>
+              </SheetTrigger>
+              <SheetContent side="left" className="bg-cream overflow-y-auto">
+                <nav className="flex flex-col gap-5 mt-8">
+                  <NavLink 
+                    to="/" 
+                    onClick={() => setMobileMenuOpen(false)} 
+                    className="text-xl font-serif text-navy hover:text-gold" 
+                    data-testid="mobile-nav-home"
                   >
-                    <span>Collection</span>
-                    <ChevronDown size={18} className={`transition-transform duration-200 ${mobileCollectionOpen ? "rotate-180 text-gold" : "text-navy/60"}`} />
-                  </button>
+                    Home
+                  </NavLink>
 
-                  {mobileCollectionOpen && (
-                    <div className="flex flex-col gap-3 pl-4 mt-3 border-l-2 border-gold/40">
-                      {collectionCategories.map((c) => (
-                        <NavLink
-                          key={c.to}
-                          to={c.to}
-                          onClick={() => setMobileMenuOpen(false)}
-                          className={({ isActive }) => `text-base ${isActive ? "text-gold font-medium" : "text-navy/80 hover:text-gold"}`}
-                          data-testid={`mobile-subnav-${c.label.toLowerCase()}`}
-                        >
-                          <div>{c.label}</div>
-                          <div className="text-[11px] text-navy/50">{c.description}</div>
-                        </NavLink>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <NavLink 
-                  to="/trending" 
-                  onClick={() => setMobileMenuOpen(false)} 
-                  className="text-xl font-serif text-navy hover:text-gold" 
-                  data-testid="mobile-nav-trending"
-                >
-                  Trending
-                </NavLink>
-
-                <NavLink 
-                  to="/best-selling" 
-                  onClick={() => setMobileMenuOpen(false)} 
-                  className="text-xl font-serif text-navy hover:text-gold" 
-                  data-testid="mobile-nav-best-selling"
-                >
-                  Best Selling
-                </NavLink>
-
-                <NavLink 
-                  to="/products" 
-                  onClick={() => setMobileMenuOpen(false)} 
-                  className="text-xl font-serif text-navy hover:text-gold" 
-                  data-testid="mobile-nav-all-products"
-                >
-                  All Products
-                </NavLink>
-
-                <NavLink 
-                  to="/bulk-custom" 
-                  onClick={() => setMobileMenuOpen(false)} 
-                  className="text-xl font-serif text-burgundy font-medium hover:text-gold" 
-                  data-testid="mobile-nav-bulk-custom"
-                >
-                  Bulk & Custom
-                </NavLink>
-
-                <NavLink 
-                  to="/about" 
-                  onClick={() => setMobileMenuOpen(false)} 
-                  className="text-xl font-serif text-navy hover:text-gold" 
-                  data-testid="mobile-nav-about-us"
-                >
-                  About Us
-                </NavLink>
-
-                <div className="border-t border-navy/10 pt-4 flex flex-col gap-4">
-                  <Link to="/wishlist" onClick={() => setMobileMenuOpen(false)} className="text-lg font-serif">Wishlist</Link>
-                  <Link to="/orders" onClick={() => setMobileMenuOpen(false)} className="text-lg font-serif">Orders</Link>
-                  {!user && <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="text-lg font-serif">Login / Register</Link>}
-                </div>
-              </nav>
-            </SheetContent>
-          </Sheet>
-
-          {/* Logo with Rich Luxury Animation */}
-          <Link to="/" className="flex-1 md:flex-none flex items-center gap-3.5 justify-center md:justify-start group" data-testid="logo-link">
-            {/* Animated Floating Badge */}
-            <div className="relative animate-logo-float">
-              {/* Rotating Conic Gold Glow Ring */}
-              <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-[#D4AF37] via-[#580018] to-[#D4AF37] opacity-75 blur-xs animate-spin-slow group-hover:opacity-100 transition-opacity" />
-              
-              <div className="relative overflow-hidden rounded-lg p-0.5 bg-white border border-gold/40 shadow-md">
-                <img
-                  src="/bevoq-logo.jpg"
-                  alt="BEVOQ Unisex Fashion"
-                  className="h-11 md:h-12 w-11 md:w-12 rounded-md object-cover transform group-hover:scale-110 transition-transform duration-500"
-                />
-                {/* Continuous Light Beam Sweep */}
-                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/60 to-transparent pointer-events-none animate-logo-shine" />
-              </div>
-            </div>
-
-            {/* Typography with Animated Metallic Shimmer */}
-            <div className="text-left">
-              <div className="flex items-center gap-1.5">
-                <h1 className="font-serif text-2xl md:text-3xl tracking-[0.18em] group-hover:tracking-[0.22em] font-bold leading-none transition-all duration-300 animate-text-shimmer">
-                  BEVOQ
-                </h1>
-                <Sparkles size={14} className="text-gold animate-star-twinkle shrink-0" />
-              </div>
-              <p className="hidden md:flex items-center gap-1.5 text-[9px] tracking-[0.28em] uppercase text-navy/70 mt-1 font-medium">
-                <span>Unisex Fashion</span>
-                <span className="text-gold">·</span>
-                <span>Estd 2026</span>
-              </p>
-            </div>
-          </Link>
-
-          {/* Nav (desktop) */}
-          <nav className="hidden md:flex items-center gap-6 lg:gap-7">
-            <NavLink
-              to="/"
-              data-testid="nav-home"
-              className={({isActive}) => `text-[13px] tracking-[0.15em] uppercase font-medium gold-underline ${isActive ? "text-gold" : "text-navy hover:text-gold"}`}
-            >
-              Home
-            </NavLink>
-
-            {/* Collection Dropdown */}
-            <div 
-              className="relative group py-2"
-              onMouseEnter={() => setCollectionDropdownOpen(true)}
-              onMouseLeave={() => setCollectionDropdownOpen(false)}
-            >
-              <button
-                type="button"
-                className={`text-[13px] tracking-[0.15em] uppercase font-medium flex items-center gap-1.5 transition-colors ${isCollectionActive ? "text-gold" : "text-navy hover:text-gold"}`}
-                data-testid="nav-collection"
-              >
-                Collection <ChevronDown size={14} className={`transition-transform duration-200 ${collectionDropdownOpen ? "rotate-180 text-gold" : ""}`} />
-              </button>
-
-              <div className="absolute left-0 top-full pt-2 w-72 hidden group-hover:block transition-all z-50">
-                <div className="bg-white border border-black/10 shadow-2xl p-3 space-y-1">
-                  <div className="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-navy/50 border-b border-black/5">
-                    Brand Categories
-                  </div>
-                  {collectionCategories.map((item) => (
-                    <Link
-                      key={item.to}
-                      to={item.to}
-                      className="block px-3 py-2.5 rounded-sm hover:bg-cream transition-colors group/item"
-                      data-testid={`dropdown-${item.label.toLowerCase()}`}
+                  {/* Mobile Collection Group */}
+                  <div className="border-y border-navy/10 py-3">
+                    <button 
+                      onClick={() => setMobileCollectionOpen(!mobileCollectionOpen)}
+                      className="flex items-center justify-between w-full text-xl font-serif text-navy"
                     >
-                      <div className="text-sm font-serif font-bold text-navy group-hover/item:text-burgundy flex items-center justify-between">
-                        <span>{item.label}</span>
-                        <span className="text-[10px] uppercase font-sans text-gold font-normal tracking-wider">Explore →</span>
+                      <span>Collection</span>
+                      <ChevronDown size={18} className={`transition-transform duration-200 ${mobileCollectionOpen ? "rotate-180 text-gold" : "text-navy/60"}`} />
+                    </button>
+
+                    {mobileCollectionOpen && (
+                      <div className="flex flex-col gap-3 pl-4 mt-3 border-l-2 border-gold/40">
+                        {collectionCategories.map((c) => (
+                          <NavLink
+                            key={c.to}
+                            to={c.to}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className={({ isActive }) => `text-base ${isActive ? "text-gold font-medium" : "text-navy/80 hover:text-gold"}`}
+                            data-testid={`mobile-subnav-${c.label.toLowerCase()}`}
+                          >
+                            <div>{c.label}</div>
+                            <div className="text-[11px] text-navy/50">{c.description}</div>
+                          </NavLink>
+                        ))}
                       </div>
-                      <div className="text-xs text-navy/60 mt-0.5 leading-snug">
-                        {item.description}
-                      </div>
-                    </Link>
-                  ))}
-                  <div className="border-t border-black/5 pt-1.5 px-3">
-                    <Link to="/products" className="text-[11px] uppercase tracking-wider text-burgundy hover:text-gold font-semibold flex items-center justify-between">
-                      <span>All Collections</span>
-                      <span>→</span>
-                    </Link>
+                    )}
                   </div>
+
+                  <NavLink 
+                    to="/trending" 
+                    onClick={() => setMobileMenuOpen(false)} 
+                    className="text-xl font-serif text-navy hover:text-gold" 
+                    data-testid="mobile-nav-trending"
+                  >
+                    Trending
+                  </NavLink>
+
+                  <NavLink 
+                    to="/best-selling" 
+                    onClick={() => setMobileMenuOpen(false)} 
+                    className="text-xl font-serif text-navy hover:text-gold" 
+                    data-testid="mobile-nav-best-selling"
+                  >
+                    Best Selling
+                  </NavLink>
+
+                  <NavLink 
+                    to="/products" 
+                    onClick={() => setMobileMenuOpen(false)} 
+                    className="text-xl font-serif text-navy hover:text-gold" 
+                    data-testid="mobile-nav-all-products"
+                  >
+                    All Products
+                  </NavLink>
+
+                  <NavLink 
+                    to="/bulk-custom" 
+                    onClick={() => setMobileMenuOpen(false)} 
+                    className="text-xl font-serif text-burgundy font-medium hover:text-gold" 
+                    data-testid="mobile-nav-bulk-custom"
+                  >
+                    Bulk & Custom
+                  </NavLink>
+
+                  <NavLink 
+                    to="/about" 
+                    onClick={() => setMobileMenuOpen(false)} 
+                    className="text-xl font-serif text-navy hover:text-gold" 
+                    data-testid="mobile-nav-about-us"
+                  >
+                    About Us
+                  </NavLink>
+
+                  <div className="border-t border-navy/10 pt-4 flex flex-col gap-4">
+                    <Link to="/wishlist" onClick={() => setMobileMenuOpen(false)} className="text-lg font-serif">Wishlist</Link>
+                    <Link to="/orders" onClick={() => setMobileMenuOpen(false)} className="text-lg font-serif">Orders</Link>
+                    {!user && <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="text-lg font-serif">Login / Register</Link>}
+                  </div>
+                </nav>
+              </SheetContent>
+            </Sheet>
+
+            {/* Quick search button for desktop on left */}
+            <button 
+              onClick={() => setOpen(v=>!v)} 
+              className="hidden md:flex items-center gap-2 text-xs uppercase tracking-wider text-navy/60 hover:text-navy transition-colors py-1 px-2"
+              data-testid="desktop-search-btn"
+            >
+              <Search size={17} strokeWidth={1.5} className="text-navy" />
+              <span className="hidden lg:inline text-[11px]">Search</span>
+            </button>
+          </div>
+
+          {/* CENTER: Brand Logo & Tagline */}
+          <div className="flex-1 flex justify-center text-center">
+            <Link to="/" className="inline-flex items-center gap-3.5 group" data-testid="logo-link">
+              {/* Animated Floating Logo Badge */}
+              <div className="relative animate-logo-float shrink-0">
+                {/* Rotating Conic Gold Glow Ring */}
+                <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-[#D4AF37] via-[#580018] to-[#D4AF37] opacity-75 blur-xs animate-spin-slow group-hover:opacity-100 transition-opacity" />
+                
+                <div className="relative overflow-hidden rounded-lg p-0.5 bg-white border border-gold/40 shadow-sm">
+                  <img
+                    src="/bevoq-logo.jpg"
+                    alt="BEVOQ Unisex Fashion"
+                    className="h-10 md:h-12 w-10 md:w-12 rounded-md object-cover transform group-hover:scale-110 transition-transform duration-500"
+                  />
+                  {/* Light beam sweep overlay */}
+                  <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/60 to-transparent pointer-events-none animate-logo-shine" />
                 </div>
               </div>
-            </div>
 
-            <NavLink
-              to="/trending"
-              data-testid="nav-trending"
-              className={({isActive}) => `text-[13px] tracking-[0.15em] uppercase font-medium gold-underline ${isActive ? "text-gold" : "text-navy hover:text-gold"}`}
-            >
-              Trending
-            </NavLink>
+              {/* Typography with Animated Shimmer & Tagline */}
+              <div className="text-left">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-serif text-2xl md:text-3xl tracking-[0.2em] group-hover:tracking-[0.24em] font-bold leading-none transition-all duration-300 animate-text-shimmer">
+                    BEVOQ
+                  </span>
+                  <Sparkles size={13} className="text-gold animate-star-twinkle shrink-0" />
+                </div>
+                <p className="flex items-center gap-1.5 text-[9px] tracking-[0.26em] uppercase text-navy/70 mt-1 font-medium">
+                  <span>Unisex Fashion</span>
+                  <span className="text-gold">·</span>
+                  <span>Estd 2026</span>
+                </p>
+              </div>
+            </Link>
+          </div>
 
-            <NavLink
-              to="/best-selling"
-              data-testid="nav-best-selling"
-              className={({isActive}) => `text-[13px] tracking-[0.15em] uppercase font-medium gold-underline ${isActive ? "text-gold" : "text-navy hover:text-gold"}`}
-            >
-              Best Selling
-            </NavLink>
+          {/* Right Action Icons */}
+          <div className="flex items-center justify-end gap-3.5 md:gap-5 w-1/4">
+            <button onClick={() => setOpen(v=>!v)} className="md:hidden" data-testid="search-toggle-btn">
+              <Search size={20} strokeWidth={1.5} className="text-navy" />
+            </button>
 
-            <NavLink
-              to="/products"
-              data-testid="nav-all-products"
-              className={({isActive}) => `text-[13px] tracking-[0.15em] uppercase font-medium gold-underline ${isActive ? "text-gold" : "text-navy hover:text-gold"}`}
-            >
-              All Products
-            </NavLink>
-
-            <NavLink
-              to="/bulk-custom"
-              data-testid="nav-bulk-custom"
-              className={({isActive}) => `text-[13px] tracking-[0.15em] uppercase font-medium gold-underline ${isActive ? "text-gold" : "text-navy hover:text-gold"}`}
-            >
-              Bulk & Custom
-            </NavLink>
-
-            <NavLink
-              to="/about"
-              data-testid="nav-about-us"
-              className={({isActive}) => `text-[13px] tracking-[0.15em] uppercase font-medium gold-underline ${isActive ? "text-gold" : "text-navy hover:text-gold"}`}
-            >
-              About Us
-            </NavLink>
-          </nav>
-
-          {/* Actions */}
-          <div className="flex items-center gap-4 md:gap-5">
-            <button onClick={() => setOpen(v=>!v)} data-testid="search-toggle-btn"><Search size={20} strokeWidth={1.5} className="text-navy" /></button>
             {user?.role === "admin" && (
               <Link to="/admin" className="text-[11px] tracking-[0.2em] uppercase text-gold hidden lg:inline" data-testid="admin-link">Admin</Link>
             )}
+
             {user ? (
               <div className="relative group hidden md:block">
-                <button className="flex items-center gap-1" data-testid="user-menu-btn"><User size={20} strokeWidth={1.5} className="text-navy" /></button>
-                <div className="absolute right-0 top-full pt-3 hidden group-hover:block">
-                  <div className="bg-white border border-black/10 py-2 w-48 shadow-lg">
+                <button className="flex items-center gap-1 p-1" data-testid="user-menu-btn" aria-label="Account">
+                  <User size={20} strokeWidth={1.5} className="text-navy" />
+                </button>
+                <div className="absolute right-0 top-full pt-3 hidden group-hover:block z-50">
+                  <div className="bg-white border border-black/10 py-2 w-48 shadow-xl rounded-sm">
                     <div className="px-4 py-2 text-[11px] text-navy/60 uppercase tracking-wider">{user.email}</div>
                     <Link to="/account" className="block px-4 py-2 text-sm hover:bg-cream">My Account</Link>
                     <Link to="/orders" className="block px-4 py-2 text-sm hover:bg-cream">Orders</Link>
@@ -332,17 +260,132 @@ export default function Header() {
                 </div>
               </div>
             ) : (
-              <Link to="/login" data-testid="login-link" className="hidden md:inline"><User size={20} strokeWidth={1.5} className="text-navy" /></Link>
+              <Link to="/login" data-testid="login-link" className="hidden md:inline p-1" aria-label="Sign In">
+                <User size={20} strokeWidth={1.5} className="text-navy" />
+              </Link>
             )}
-            <Link to="/wishlist" className="relative" data-testid="wishlist-link">
+
+            <Link to="/wishlist" className="relative p-1" data-testid="wishlist-link" aria-label="Wishlist">
               <Heart size={20} strokeWidth={1.5} className="text-navy" />
-              {slugs.length > 0 && <span className="absolute -top-2 -right-2 bg-gold text-navy text-[10px] w-4 h-4 flex items-center justify-center font-medium">{slugs.length}</span>}
+              {slugs.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-gold text-navy text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                  {slugs.length}
+                </span>
+              )}
             </Link>
-            <Link to="/orders" className="hidden md:inline" data-testid="orders-link"><Package size={20} strokeWidth={1.5} className="text-navy" /></Link>
-            <Link to="/cart" className="relative" data-testid="cart-link">
+
+            <Link to="/orders" className="hidden md:inline p-1" data-testid="orders-link" aria-label="Orders">
+              <Package size={20} strokeWidth={1.5} className="text-navy" />
+            </Link>
+
+            <Link to="/cart" className="relative p-1" data-testid="cart-link" aria-label="Cart">
               <ShoppingBag size={20} strokeWidth={1.5} className="text-navy" />
-              {count > 0 && <span className="absolute -top-2 -right-2 bg-navy text-white text-[10px] w-4 h-4 flex items-center justify-center" data-testid="cart-count">{count}</span>}
+              {count > 0 && (
+                <span className="absolute -top-1 -right-1 bg-navy text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold" data-testid="cart-count">
+                  {count}
+                </span>
+              )}
             </Link>
+          </div>
+        </div>
+
+        {/* Tier 2: Centered Menu Tabs (Desktop) */}
+        <div className="hidden md:block border-t border-black/5 bg-white/60">
+          <div className="max-w-[1400px] mx-auto px-6 py-2.5 flex items-center justify-center">
+            <nav className="flex items-center gap-7 lg:gap-9">
+              <NavLink
+                to="/"
+                data-testid="nav-home"
+                className={({isActive}) => `text-[12px] tracking-[0.18em] uppercase font-semibold gold-underline transition-colors ${isActive ? "text-gold" : "text-navy hover:text-gold"}`}
+              >
+                Home
+              </NavLink>
+
+              {/* Collection Dropdown */}
+              <div 
+                className="relative group py-1"
+                onMouseEnter={() => setCollectionDropdownOpen(true)}
+                onMouseLeave={() => setCollectionDropdownOpen(false)}
+              >
+                <button
+                  type="button"
+                  className={`text-[12px] tracking-[0.18em] uppercase font-semibold flex items-center gap-1.5 transition-colors ${isCollectionActive ? "text-gold" : "text-navy hover:text-gold"}`}
+                  data-testid="nav-collection"
+                >
+                  Collection <ChevronDown size={13} className={`transition-transform duration-200 ${collectionDropdownOpen ? "rotate-180 text-gold" : ""}`} />
+                </button>
+
+                <div className="absolute left-1/2 -translate-x-1/2 top-full pt-2 w-72 hidden group-hover:block transition-all z-50">
+                  <div className="bg-white border border-black/10 shadow-2xl p-3 space-y-1 text-left rounded-sm">
+                    <div className="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-navy/50 border-b border-black/5">
+                      Brand Categories
+                    </div>
+                    {collectionCategories.map((item) => (
+                      <Link
+                        key={item.to}
+                        to={item.to}
+                        className="block px-3 py-2.5 rounded-sm hover:bg-cream transition-colors group/item"
+                        data-testid={`dropdown-${item.label.toLowerCase()}`}
+                      >
+                        <div className="text-sm font-serif font-bold text-navy group-hover/item:text-burgundy flex items-center justify-between">
+                          <span>{item.label}</span>
+                          <span className="text-[10px] uppercase font-sans text-gold font-normal tracking-wider">Explore →</span>
+                        </div>
+                        <div className="text-xs text-navy/60 mt-0.5 leading-snug">
+                          {item.description}
+                        </div>
+                      </Link>
+                    ))}
+                    <div className="border-t border-black/5 pt-1.5 px-3">
+                      <Link to="/products" className="text-[11px] uppercase tracking-wider text-burgundy hover:text-gold font-semibold flex items-center justify-between">
+                        <span>All Collections</span>
+                        <span>→</span>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <NavLink
+                to="/trending"
+                data-testid="nav-trending"
+                className={({isActive}) => `text-[12px] tracking-[0.18em] uppercase font-semibold gold-underline transition-colors ${isActive ? "text-gold" : "text-navy hover:text-gold"}`}
+              >
+                Trending
+              </NavLink>
+
+              <NavLink
+                to="/best-selling"
+                data-testid="nav-best-selling"
+                className={({isActive}) => `text-[12px] tracking-[0.18em] uppercase font-semibold gold-underline transition-colors ${isActive ? "text-gold" : "text-navy hover:text-gold"}`}
+              >
+                Best Selling
+              </NavLink>
+
+              <NavLink
+                to="/products"
+                data-testid="nav-all-products"
+                className={({isActive}) => `text-[12px] tracking-[0.18em] uppercase font-semibold gold-underline transition-colors ${isActive ? "text-gold" : "text-navy hover:text-gold"}`}
+              >
+                All Products
+              </NavLink>
+
+              <NavLink
+                to="/bulk-custom"
+                data-testid="nav-bulk-custom"
+                className={({isActive}) => `text-[12px] tracking-[0.18em] uppercase font-semibold gold-underline transition-colors ${isActive ? "text-gold" : "text-navy hover:text-gold"}`}
+              >
+                Bulk & Custom
+              </NavLink>
+
+              <NavLink
+                to="/about"
+                data-testid="nav-about-us"
+                className={({isActive}) => `text-[12px] tracking-[0.18em] uppercase font-semibold gold-underline transition-colors ${isActive ? "text-gold" : "text-navy hover:text-gold"}`}
+              >
+                About Us
+              </NavLink>
+            </nav>
           </div>
         </div>
 
