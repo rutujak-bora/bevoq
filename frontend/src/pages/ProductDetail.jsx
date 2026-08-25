@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import api, { formatINR } from "@/lib/api";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
+import { useAuth } from "@/context/AuthContext";
 import { 
   Heart, Truck, RotateCcw, ShieldCheck, Star, Ruler, 
   MapPin, CheckCircle2, AlertCircle, ChevronRight, Sparkles, X, 
@@ -96,6 +97,9 @@ export default function ProductDetail() {
   const [qty, setQty] = useState(1);
   const { add } = useCart();
   const { toggle, has } = useWishlist();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // Size chart modal state
   const [sizeModalOpen, setSizeModalOpen] = useState(false);
@@ -123,9 +127,23 @@ export default function ProductDetail() {
   const outOfStock = product.stock <= 0;
 
   const handleAdd = () => {
+    if (!user) {
+      toast.error("Please login or create an account to add items to your cart.");
+      navigate("/login", { state: { from: location.pathname } });
+      return;
+    }
     if (product.sizes?.length && !size) { toast.error("Please select a size"); return; }
     add(product, { quantity: qty, size, color });
     toast.success(`${product.title} (${size || "Std"}) added to cart!`);
+  };
+
+  const handleWishlistToggle = () => {
+    if (!user) {
+      toast.error("Please login or create an account to save items to your wishlist.");
+      navigate("/login", { state: { from: location.pathname } });
+      return;
+    }
+    toggle(product);
   };
 
   const handlePincodeCheck = (e) => {
@@ -307,7 +325,7 @@ export default function ProductDetail() {
               {outOfStock ? "Sold Out" : `Add to Cart • ${formatINR(product.price * qty)}`}
             </button>
             <button 
-              onClick={() => toggle(product)} 
+              onClick={handleWishlistToggle} 
               className={`w-14 h-[54px] border flex items-center justify-center transition-colors ${has(product.slug) ? "border-gold text-gold fill-gold bg-gold/5" : "border-navy text-navy hover:border-gold hover:text-gold bg-white"}`} 
               data-testid="wishlist-btn-detail"
               aria-label="Save to Wishlist"

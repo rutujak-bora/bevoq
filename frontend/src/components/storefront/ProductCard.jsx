@@ -1,13 +1,29 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Heart, Star } from "lucide-react";
 import { useWishlist } from "@/context/WishlistContext";
+import { useAuth } from "@/context/AuthContext";
 import { formatINR } from "@/lib/api";
+import { toast } from "sonner";
 
 export default function ProductCard({ product }) {
   const { toggle, has } = useWishlist();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
   const img = product.images?.[0];
   const active = has(product.slug);
+
+  const handleWishlist = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!user) {
+      toast.error("Please login or create an account to save items to your wishlist.");
+      navigate("/login", { state: { from: location.pathname } });
+      return;
+    }
+    toggle(product);
+  };
 
   const discountPercent = (product.compare_at_price && product.compare_at_price > product.price)
     ? Math.round(((product.compare_at_price - product.price) / product.compare_at_price) * 100)
@@ -51,7 +67,7 @@ export default function ProductCard({ product }) {
 
       {/* Wishlist Button */}
       <button
-        onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(product); }}
+        onClick={handleWishlist}
         className={`absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full bg-white/90 backdrop-blur shadow-sm z-10 transition-colors ${active ? "text-gold fill-gold" : "text-navy hover:text-gold"}`}
         data-testid={`wishlist-toggle-${product.slug}`}
         aria-label="Toggle wishlist"

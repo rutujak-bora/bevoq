@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { formatApiError } from "@/lib/api";
 import { toast } from "sonner";
@@ -7,6 +7,7 @@ import { toast } from "sonner";
 export default function Login() {
   const { login } = useAuth();
   const nav = useNavigate();
+  const location = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -17,8 +18,9 @@ export default function Login() {
     setLoading(true); setErr("");
     try {
       const user = await login(email, password);
-      toast.success("Welcome back");
-      nav(user.role === "admin" ? "/admin" : "/");
+      toast.success("Welcome back to BEVOQ");
+      const destination = user.role === "admin" ? "/admin" : (location.state?.from || "/");
+      nav(destination, { replace: true });
     } catch (e) {
       setErr(formatApiError(e.response?.data?.detail) || e.message);
     } finally { setLoading(false); }

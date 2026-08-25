@@ -61,9 +61,9 @@ export default function App() {
               <Route path="/bulk-custom" element={<StoreRoute><BulkCustom /></StoreRoute>} />
               <Route path="/about" element={<StoreRoute><About /></StoreRoute>} />
               <Route path="/cart" element={<StoreRoute><Cart /></StoreRoute>} />
-              <Route path="/checkout" element={<StoreRoute><Checkout /></StoreRoute>} />
-              <Route path="/order-confirmation/:id" element={<StoreRoute><OrderConfirmation /></StoreRoute>} />
-              <Route path="/wishlist" element={<StoreRoute><Wishlist /></StoreRoute>} />
+              <Route path="/checkout" element={<ProtectedRoute><StoreRoute><Checkout /></StoreRoute></ProtectedRoute>} />
+              <Route path="/order-confirmation/:id" element={<ProtectedRoute><StoreRoute><OrderConfirmation /></StoreRoute></ProtectedRoute>} />
+              <Route path="/wishlist" element={<ProtectedRoute><StoreRoute><Wishlist /></StoreRoute></ProtectedRoute>} />
               <Route path="/orders" element={<ProtectedRoute><StoreRoute><Orders /></StoreRoute></ProtectedRoute>} />
               <Route path="/account" element={<ProtectedRoute><StoreRoute><Account /></StoreRoute></ProtectedRoute>} />
               <Route path="/login" element={<StoreRoute><Login /></StoreRoute>} />

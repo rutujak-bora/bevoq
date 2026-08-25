@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { formatApiError } from "@/lib/api";
 import { toast } from "sonner";
@@ -7,6 +7,7 @@ import { toast } from "sonner";
 export default function Register() {
   const { register } = useAuth();
   const nav = useNavigate();
+  const location = useLocation();
   const [f, setF] = useState({ name:"", email:"", phone:"", password:"", street:"", city:"", state:"", pincode:"", country:"India" });
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,7 +19,8 @@ export default function Register() {
       const address = f.street ? { label:"Home", full_name: f.name, phone: f.phone, street: f.street, city: f.city, state: f.state, pincode: f.pincode, country: f.country } : undefined;
       await register({ name: f.name, email: f.email, phone: f.phone, password: f.password, address });
       toast.success("Welcome to BEVOQ");
-      nav("/");
+      const destination = location.state?.from || "/";
+      nav(destination, { replace: true });
     } catch (e) {
       setErr(formatApiError(e.response?.data?.detail) || e.message);
     } finally { setLoading(false); }

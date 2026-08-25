@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
 import { formatINR } from "@/lib/api";
 import { Trash2, Minus, Plus, Truck, Sparkles, ShieldCheck, RotateCcw, Tag } from "lucide-react";
 import { toast } from "sonner";
 
 export default function Cart() {
   const { items, update, remove, subtotal } = useCart();
+  const { user } = useAuth();
   const nav = useNavigate();
   const [coupon, setCoupon] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState(null);
@@ -24,6 +26,15 @@ export default function Cart() {
     } else {
       toast.error("Invalid coupon code. Try WELCOME10");
     }
+  };
+
+  const handleProceedToCheckout = () => {
+    if (!user) {
+      toast.error("Please sign in or create an account to place your order.");
+      nav("/login", { state: { from: "/checkout" } });
+      return;
+    }
+    nav("/checkout");
   };
 
   const discount = appliedCoupon === "WELCOME10" ? Math.round(subtotal * 0.1) : 0;
@@ -169,7 +180,7 @@ export default function Cart() {
               </form>
 
               <button 
-                onClick={()=>nav("/checkout")} 
+                onClick={handleProceedToCheckout} 
                 className="btn-primary w-full mt-6 py-3.5 text-xs uppercase tracking-widest font-bold shadow-xl" 
                 data-testid="checkout-btn"
               >
