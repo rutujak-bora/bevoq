@@ -183,21 +183,32 @@ export default function Header() {
             </SheetContent>
           </Sheet>
 
-          {/* Logo with Luxury Animation */}
-          <Link to="/" className="flex-1 md:flex-none flex items-center gap-3 justify-center md:justify-start group" data-testid="logo-link">
-            <div className="relative overflow-hidden rounded-lg p-0.5 border border-gold/30 group-hover:border-gold animate-logo-glow transition-all duration-300 shadow-sm bg-white">
-              <img
-                src="/bevoq-logo.jpg"
-                alt="BEVOQ Unisex Fashion"
-                className="h-11 md:h-12 w-11 md:w-12 rounded-md object-cover transform group-hover:scale-105 transition-transform duration-500"
-              />
-              {/* Shimmer reflection animation overlay */}
-              <div className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/45 to-transparent pointer-events-none animate-logo-shine" />
+          {/* Logo with Rich Luxury Animation */}
+          <Link to="/" className="flex-1 md:flex-none flex items-center gap-3.5 justify-center md:justify-start group" data-testid="logo-link">
+            {/* Animated Floating Badge */}
+            <div className="relative animate-logo-float">
+              {/* Rotating Conic Gold Glow Ring */}
+              <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-[#D4AF37] via-[#580018] to-[#D4AF37] opacity-75 blur-xs animate-spin-slow group-hover:opacity-100 transition-opacity" />
+              
+              <div className="relative overflow-hidden rounded-lg p-0.5 bg-white border border-gold/40 shadow-md">
+                <img
+                  src="/bevoq-logo.jpg"
+                  alt="BEVOQ Unisex Fashion"
+                  className="h-11 md:h-12 w-11 md:w-12 rounded-md object-cover transform group-hover:scale-110 transition-transform duration-500"
+                />
+                {/* Continuous Light Beam Sweep */}
+                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/60 to-transparent pointer-events-none animate-logo-shine" />
+              </div>
             </div>
+
+            {/* Typography with Animated Metallic Shimmer */}
             <div className="text-left">
-              <h1 className="font-serif text-2xl md:text-3xl tracking-[0.18em] group-hover:tracking-[0.22em] text-navy font-semibold leading-none transition-all duration-300">
-                BEVOQ
-              </h1>
+              <div className="flex items-center gap-1.5">
+                <h1 className="font-serif text-2xl md:text-3xl tracking-[0.18em] group-hover:tracking-[0.22em] font-bold leading-none transition-all duration-300 animate-text-shimmer">
+                  BEVOQ
+                </h1>
+                <Sparkles size={14} className="text-gold animate-star-twinkle shrink-0" />
+              </div>
               <p className="hidden md:flex items-center gap-1.5 text-[9px] tracking-[0.28em] uppercase text-navy/70 mt-1 font-medium">
                 <span>Unisex Fashion</span>
                 <span className="text-gold">·</span>
