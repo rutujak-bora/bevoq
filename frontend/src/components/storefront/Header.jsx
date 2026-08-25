@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
-import { ShoppingBag, Heart, Search, User, Menu, X, Package, ChevronDown } from "lucide-react";
+import { ShoppingBag, Heart, Search, User, Menu, X, Package, ChevronDown, Copy, Check, Sparkles } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { useAuth } from "@/context/AuthContext";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 
 const collectionCategories = [
   { 
@@ -34,10 +35,18 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [collectionDropdownOpen, setCollectionDropdownOpen] = useState(false);
   const [mobileCollectionOpen, setMobileCollectionOpen] = useState(true);
+  const [copied, setCopied] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
   const isCollectionActive = location.pathname.startsWith("/collections/");
+
+  const copyCoupon = () => {
+    navigator.clipboard.writeText("WELCOME10");
+    setCopied(true);
+    toast.success("Coupon code 'WELCOME10' copied! Get 10% off at checkout.");
+    setTimeout(() => setCopied(false), 3000);
+  };
 
   const submit = (e) => {
     e.preventDefault();
@@ -47,9 +56,31 @@ export default function Header() {
 
   return (
     <>
-      {/* Announcement bar */}
-      <div className="bg-navy text-white text-[11px] tracking-[0.25em] uppercase py-2 text-center font-medium" data-testid="announcement-bar">
-        Free Shipping on Orders Above ₹999 &nbsp;·&nbsp; Use Code <span className="text-gold font-bold">WELCOME10</span> for 10% Off &nbsp;·&nbsp; Unisex Fashion · Estd 2026
+      {/* Dynamic Announcement Bar */}
+      <div className="bg-navy text-white text-[11px] py-2 px-4 border-b border-gold/20" data-testid="announcement-bar">
+        <div className="max-w-[1400px] mx-auto flex flex-wrap items-center justify-between gap-2 text-center md:text-left">
+          <div className="flex items-center justify-center gap-2 mx-auto md:mx-0">
+            <span className="inline-flex items-center gap-1 text-gold font-semibold uppercase tracking-widest text-[10px]">
+              <Sparkles size={12} /> Special Offer
+            </span>
+            <span className="text-white/80 hidden sm:inline">|</span>
+            <span className="tracking-wider">FREE Shipping on orders above ₹999</span>
+          </div>
+
+          <div className="flex items-center justify-center gap-3 mx-auto md:mx-0">
+            <span className="text-white/90">
+              Use code <strong className="text-gold font-mono tracking-wider bg-black/30 px-1.5 py-0.5 rounded border border-gold/30">WELCOME10</strong> for 10% OFF
+            </span>
+            <button
+              onClick={copyCoupon}
+              className="inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-gold text-navy hover:bg-gold/90 transition-all cursor-pointer shadow-sm"
+              title="Click to copy coupon"
+            >
+              {copied ? <Check size={11} className="text-navy" /> : <Copy size={11} />}
+              {copied ? "Copied" : "Copy"}
+            </button>
+          </div>
+        </div>
       </div>
 
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/85 border-b border-black/5" data-testid="site-header">

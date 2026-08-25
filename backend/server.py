@@ -1106,8 +1106,12 @@ async def seed():
 
 @app.on_event("startup")
 async def on_startup():
-    await seed()
-    logger.info("BEVOQ backend ready")
+    try:
+        await seed()
+        logger.info("BEVOQ backend ready & seeded")
+    except Exception as e:
+        logger.warning(f"Database connection warning during seed: {e}")
+        logger.info("BEVOQ backend server started (check MongoDB Atlas IP Access)")
 
 
 @app.on_event("shutdown")
