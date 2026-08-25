@@ -21,10 +21,10 @@ export default function Footer() {
   };
 
   const perks = [
-    { icon: Truck, title: "Free Shipping", text: "On orders above ₹999" },
-    { icon: RotateCcw, title: "Easy Returns", text: "7-day return policy" },
-    { icon: ShieldCheck, title: "Secure Payments", text: "100% protected checkout" },
-    { icon: Headphones, title: "Support Online", text: "Chat & email 9am–9pm" },
+    { icon: Truck, title: "Free Shipping", text: "On orders above ₹999", link: "/products" },
+    { icon: RotateCcw, title: "Easy Returns", text: "7-day return policy", link: "/about" },
+    { icon: ShieldCheck, title: "Secure Payments", text: "100% protected checkout", link: "/products" },
+    { icon: Headphones, title: "Support Online", text: "WhatsApp: +91 96045 08513", link: "https://wa.me/919604508513?text=Hi%20BEVOQ,%20I%20need%20some%20assistance" },
   ];
 
   return (
@@ -33,13 +33,19 @@ export default function Footer() {
       <div className="border-b border-white/10">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-10 grid grid-cols-2 md:grid-cols-4 gap-8">
           {perks.map(p => (
-            <div key={p.title} className="flex items-start gap-3">
-              <p.icon size={22} className="text-gold shrink-0 mt-1" strokeWidth={1.5} />
+            <a 
+              key={p.title} 
+              href={p.link}
+              target={p.link.startsWith("http") ? "_blank" : "_self"}
+              rel={p.link.startsWith("http") ? "noopener noreferrer" : ""}
+              className="flex items-start gap-3 group hover:opacity-90 transition-opacity"
+            >
+              <p.icon size={22} className="text-gold shrink-0 mt-1 group-hover:scale-110 transition-transform" strokeWidth={1.5} />
               <div>
-                <div className="text-[13px] tracking-[0.15em] uppercase font-medium">{p.title}</div>
+                <div className="text-[13px] tracking-[0.15em] uppercase font-medium group-hover:text-gold transition-colors">{p.title}</div>
                 <div className="text-sm text-white/70 mt-1">{p.text}</div>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </div>
