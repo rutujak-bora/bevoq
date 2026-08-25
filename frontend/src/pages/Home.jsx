@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "@/lib/api";
 import ProductCard from "@/components/storefront/ProductCard";
+import HeroCarousel from "@/components/storefront/HeroCarousel";
 import { ArrowRight } from "lucide-react";
 
 export default function Home() {
@@ -22,22 +23,8 @@ export default function Home() {
 
   return (
     <div>
-      {/* Hero */}
-      <section className="relative h-[85vh] min-h-[600px] w-full overflow-hidden" data-testid="hero-section">
-        <img src="https://images.unsplash.com/photo-1507553532144-b9df5e38c8d1?w=1920&q=85" alt="BEVOQ campaign" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 hero-overlay" />
-        <div className="relative z-10 h-full max-w-[1400px] mx-auto px-6 md:px-10 flex items-end pb-24">
-          <div className="text-white max-w-2xl fade-up">
-            <p className="overline text-gold mb-6">Season 2026 · Unisex Fashion</p>
-            <h1 className="font-serif text-5xl md:text-7xl leading-[0.95] font-light">Fashion for<br/><em className="text-gold not-italic">Everyone,</em><br/>Every Day.</h1>
-            <p className="mt-6 text-white/80 text-lg max-w-md">Unisex fashion for the modern wardrobe. Discover BEVOQ — where style has no boundaries.</p>
-            <div className="flex flex-wrap gap-4 mt-10">
-              <Link to="/products" className="btn-primary" data-testid="hero-shop-btn">Shop Collection</Link>
-              <Link to="/about" className="btn-outline border-white text-white hover:bg-white hover:text-burgundy" data-testid="hero-explore-btn">Our Story</Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Dynamic Multi-Slide Hero Carousel */}
+      <HeroCarousel />
 
       {/* Top Collections Grid */}
       <section className="max-w-[1400px] mx-auto px-6 md:px-10 py-20 md:py-28" data-testid="top-collections">

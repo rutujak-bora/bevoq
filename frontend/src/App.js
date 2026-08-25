@@ -27,6 +27,7 @@ import ForgotPassword from "@/pages/ForgotPassword";
 
 import AdminLogin from "@/pages/admin/AdminLogin";
 import Dashboard from "@/pages/admin/Dashboard";
+import AdminBanners from "@/pages/admin/AdminBanners";
 import { AdminProducts, AdminProductForm } from "@/pages/admin/AdminProducts";
 import AdminCollections from "@/pages/admin/AdminCollections";
 import { AdminOrders, AdminOrderDetail } from "@/pages/admin/AdminOrders";
@@ -73,6 +74,7 @@ export default function App() {
               {/* Admin */}
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin" element={<ProtectedRoute adminOnly><Dashboard /></ProtectedRoute>} />
+              <Route path="/admin/banners" element={<ProtectedRoute adminOnly><AdminBanners /></ProtectedRoute>} />
               <Route path="/admin/products" element={<ProtectedRoute adminOnly><AdminProducts /></ProtectedRoute>} />
               <Route path="/admin/products/new" element={<ProtectedRoute adminOnly><AdminProductForm /></ProtectedRoute>} />
               <Route path="/admin/products/:id/edit" element={<ProtectedRoute adminOnly><AdminProductForm /></ProtectedRoute>} />

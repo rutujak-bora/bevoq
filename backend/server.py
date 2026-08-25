@@ -13,7 +13,7 @@ from typing import List, Optional, Any
 
 import bcrypt
 import jwt
-from fastapi import FastAPI, APIRouter, HTTPException, Depends, Request, Response, Query
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, Request, Response, Query, File, UploadFile
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, Field, EmailStr, ConfigDict
@@ -230,6 +230,20 @@ class CustomRequestInput(BaseModel):
     reference_link: Optional[str] = None
     image_url: Optional[str] = None
     expected_delivery: Optional[str] = None
+
+
+class BannerInput(BaseModel):
+    title: str
+    subtitle: Optional[str] = None
+    description: Optional[str] = None
+    image_url: str
+    cta_text: Optional[str] = "Shop Now"
+    cta_link: Optional[str] = "/products"
+    secondary_cta_text: Optional[str] = None
+    secondary_cta_link: Optional[str] = None
+    order: Optional[int] = 1
+    active: Optional[bool] = True
+
 
 
 
@@ -830,8 +844,76 @@ async def admin_update_custom_request_status(request_id: str, payload: dict, adm
     return await db.custom_requests.find_one({"id": request_id}, {"_id": 0})
 
 
+# --- Banners & Hero Carousel ---
+@api.get("/banners")
+async def get_banners():
+    cursor = db.banners.find({"active": True}).sort("order", 1)
+    banners = await cursor.to_list(100)
+    for b in banners:
+        b.pop("_id", None)
+    return banners
 
-# =========================
+
+@api.get("/admin/banners")
+async def get_admin_banners(admin: dict = Depends(require_admin)):
+    cursor = db.banners.find({}).sort("order", 1)
+    banners = await cursor.to_list(100)
+    for b in banners:
+        b.pop("_id", None)
+    return banners
+
+
+@api.post("/admin/banners")
+async def create_banner(data: BannerInput, admin: dict = Depends(require_admin)):
+    doc = {
+        "id": str(uuid.uuid4()),
+        **data.dict(),
+        "created_at": now_iso(),
+        "updated_at": now_iso(),
+    }
+    await db.banners.insert_one(doc)
+    doc.pop("_id", None)
+    return doc
+
+
+@api.put("/admin/banners/{id}")
+async def update_banner(id: str, data: BannerInput, admin: dict = Depends(require_admin)):
+    update_data = {**data.dict(), "updated_at": now_iso()}
+    res = await db.banners.update_one({"id": id}, {"$set": update_data})
+    if res.matched_count == 0:
+        raise HTTPException(404, "Banner not found")
+    b = await db.banners.find_one({"id": id})
+    b.pop("_id", None)
+    return b
+
+
+@api.delete("/admin/banners/{id}")
+async def delete_banner(id: str, admin: dict = Depends(require_admin)):
+    res = await db.banners.delete_one({"id": id})
+    if res.deleted_count == 0:
+        raise HTTPException(404, "Banner not found")
+    return {"ok": True, "message": "Banner deleted successfully"}
+
+
+@api.post("/admin/upload-banner")
+async def upload_banner_image(file: UploadFile = File(...), admin: dict = Depends(require_admin)):
+    ext = file.filename.split(".")[-1].lower() if "." in file.filename else "jpg"
+    if ext not in ["jpg", "jpeg", "png", "webp", "gif"]:
+        raise HTTPException(400, "Invalid image format (jpg, png, webp, gif supported)")
+    
+    unique_filename = f"banner_{uuid.uuid4().hex[:10]}.{ext}"
+    target_dir = ROOT_DIR.parent / "frontend" / "public" / "images" / "banners"
+    target_dir.mkdir(parents=True, exist_ok=True)
+    target_path = target_dir / unique_filename
+    
+    contents = await file.read()
+    with open(target_path, "wb") as f:
+        f.write(contents)
+    
+    image_url = f"/images/banners/{unique_filename}"
+    return {"image_url": image_url, "filename": unique_filename}
+
+
 # =========================
 # Seed data
 # =========================
@@ -1027,6 +1109,61 @@ SAMPLE_COLLECTIONS = [
     {"title": "Best Selling", "slug": "best-selling", "description": "Customer favourites.", "banner_image": None},
 ]
 
+SAMPLE_BANNERS = [
+    {
+        "id": "banner-1",
+        "title": "Fashion for Everyone, Every Day.",
+        "subtitle": "Season 2026 · Unisex Fashion",
+        "description": "Discover considered unisex streetwear, oversized drops, and effortless daily essentials.",
+        "image_url": "https://images.unsplash.com/photo-1507553532144-b9df5e38c8d1?w=1920&q=85",
+        "cta_text": "Shop T-Shirts",
+        "cta_link": "/collections/t-shirts",
+        "secondary_cta_text": "Our Story",
+        "secondary_cta_link": "/about",
+        "order": 1,
+        "active": True
+    },
+    {
+        "id": "banner-2",
+        "title": "Royal Men's Kurta & Festive Heritage.",
+        "subtitle": "Artisanal Craft · Exclusive for Men",
+        "description": "Handcrafted Chikankari, raw silk, and embroidered jacquard kurtas for festive celebrations.",
+        "image_url": "/images/kurta/kurta_banner.jpg",
+        "cta_text": "Explore Kurtas",
+        "cta_link": "/collections/kurta",
+        "secondary_cta_text": "All Products",
+        "secondary_cta_link": "/products",
+        "order": 2,
+        "active": True
+    },
+    {
+        "id": "banner-3",
+        "title": "Modern Western Dresses & Silhouettes.",
+        "subtitle": "Elegance in Motion · Women's Edit",
+        "description": "Tailored liquid silk dresses, structured crop shirts, and statement printed blouses.",
+        "image_url": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1920&q=85",
+        "cta_text": "Shop Women",
+        "cta_link": "/collections/women",
+        "secondary_cta_text": "Trending Now",
+        "secondary_cta_link": "/trending",
+        "order": 3,
+        "active": True
+    },
+    {
+        "id": "banner-4",
+        "title": "Custom Printing & Low-MOQ Bulk Orders.",
+        "subtitle": "Your Vision · Our Atelier Craft",
+        "description": "High-density screen prints, 3D puff embroidery, and customized private-label manufacturing.",
+        "image_url": "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=1920&q=85",
+        "cta_text": "Request Quote",
+        "cta_link": "/bulk-custom",
+        "secondary_cta_text": "WhatsApp Us",
+        "secondary_cta_link": "https://wa.me/919604508513",
+        "order": 4,
+        "active": True
+    }
+]
+
 
 
 async def seed():
@@ -1082,6 +1219,15 @@ async def seed():
                 "id": str(uuid.uuid4()),
                 **c,
                 "created_at": now_iso(),
+            })
+
+    # Banners
+    for b in SAMPLE_BANNERS:
+        if not await db.banners.find_one({"id": b["id"]}):
+            await db.banners.insert_one({
+                **b,
+                "created_at": now_iso(),
+                "updated_at": now_iso(),
             })
 
     # Products

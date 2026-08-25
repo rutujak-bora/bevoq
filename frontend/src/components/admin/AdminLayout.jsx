@@ -1,10 +1,11 @@
 import React from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { LayoutDashboard, Package, Layers, ShoppingCart, Users, CreditCard, LogOut } from "lucide-react";
+import { LayoutDashboard, Package, Layers, ShoppingCart, Users, CreditCard, Image as ImageIcon, LogOut } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 const links = [
   { to: "/admin", icon: LayoutDashboard, label: "Dashboard", end: true },
+  { to: "/admin/banners", icon: ImageIcon, label: "Hero Banners" },
   { to: "/admin/products", icon: Package, label: "Products" },
   { to: "/admin/collections", icon: Layers, label: "Collections" },
   { to: "/admin/orders", icon: ShoppingCart, label: "Orders" },
