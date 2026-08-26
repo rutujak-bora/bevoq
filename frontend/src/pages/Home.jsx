@@ -80,6 +80,56 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ─── Signature Design Concepts (Q37) ─── */}
+      <section className="bg-[#FAF8F5] py-20" data-testid="design-concepts">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10">
+          <div className="flex items-end justify-between mb-12">
+            <div>
+              <p className="overline text-gold">Design Studio</p>
+              <h2 className="serif-display text-4xl md:text-5xl mt-3 text-navy">Signature Concepts</h2>
+            </div>
+            <Link to="/about" className="hidden md:inline-flex items-center gap-2 text-navy text-sm uppercase tracking-[0.15em]">See Brand Story <ArrowRight size={16} /></Link>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Concept 01 - Urban Crest */}
+            <div className="bg-[#1a0008] rounded-2xl overflow-hidden shadow-xl hover:scale-[1.01] transition-transform">
+              <div className="flex flex-col items-center justify-center py-14 px-8 text-center">
+                <div className="w-28 h-32 rounded-xl flex items-center justify-center text-5xl bg-[#D4AF37]/10 border-2 border-[#D4AF37]/30 shadow-lg">👕</div>
+                <p className="text-xs uppercase tracking-widest mt-5 font-semibold text-[#D4AF37]/80">Design Concept 01</p>
+                <h3 className="font-serif text-3xl mt-2 text-[#D4AF37]">Urban Crest</h3>
+                <p className="text-sm mt-1 text-white/50">Oversized Streetwear · DTF Metallic Gold Print</p>
+              </div>
+              <div className="px-8 pb-8 text-white/70 text-sm leading-relaxed">
+                A bold chest-center graphic tee with the BEVOQ emblem reimagined as a royal crest — crown, laurel wreath, and abstract B-monogram. Metallic gold DTF print on bio-washed black or deep burgundy. The definition of luxury streetwear.
+                <div className="flex flex-wrap gap-2 mt-5">
+                  {["240 GSM Cotton", "DTF Gold Print", "Unisex Oversized", "Burgundy · Black · Grey"].map(t => (
+                    <span key={t} className="text-xs px-2 py-1 rounded-full border border-[#D4AF37]/30 text-[#D4AF37]/70">{t}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Concept 02 - Identity Lines */}
+            <div className="bg-[#0A1A3E] rounded-2xl overflow-hidden shadow-xl hover:scale-[1.01] transition-transform">
+              <div className="flex flex-col items-center justify-center py-14 px-8 text-center">
+                <div className="w-28 h-32 rounded-xl flex items-center justify-center text-5xl bg-[#FAF8F5]/10 border-2 border-[#FAF8F5]/20 shadow-lg">👕</div>
+                <p className="text-xs uppercase tracking-widest mt-5 font-semibold text-[#FAF8F5]/60">Design Concept 02</p>
+                <h3 className="font-serif text-3xl mt-2 text-[#FAF8F5]">Identity Lines</h3>
+                <p className="text-sm mt-1 text-white/40">Abstract Minimal · Clean Editorial Aesthetic</p>
+              </div>
+              <div className="px-8 pb-8 text-white/60 text-sm leading-relaxed">
+                A minimal tee with abstract geometric lines forming a human silhouette in motion — representing freedom and self-expression. Chest-left placement. Clean 2-color DTF print. Below in small type: 'BEVOQ · Wear Your Identity · MMXXVI'. Timeless everyday wear.
+                <div className="flex flex-wrap gap-2 mt-5">
+                  {["200 GSM Pima Cotton", "2-Color DTF Print", "Regular & Slim Fit", "Cream · Navy · Off-White"].map(t => (
+                    <span key={t} className="text-xs px-2 py-1 rounded-full border border-[#FAF8F5]/20 text-[#FAF8F5]/50">{t}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Trending Row */}
       <section className="max-w-[1400px] mx-auto px-6 md:px-10 py-20" data-testid="trending-section">
         <div className="flex items-end justify-between mb-12">
