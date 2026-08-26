@@ -87,12 +87,135 @@ export default function About() {
             </p>
             <Link to="/products" className="btn-primary mt-8 inline-block">Shop the Collection</Link>
           </div>
-          <div className="aspect-[3/4] overflow-hidden max-w-md mx-auto md:ml-auto shadow-2xl rounded-lg">
-            <img
-              src="/bevoq-logo.jpg"
-              alt="BEVOQ brand identity"
-              className="w-full h-full object-cover"
-            />
+          {/* ── Animated Brand Logo ── */}
+          <div className="flex items-center justify-center py-8">
+            <style>{`
+              @keyframes bevoq-float {
+                0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(-18px); }
+              }
+              @keyframes bevoq-shimmer {
+                0% { background-position: -200% center; }
+                100% { background-position: 200% center; }
+              }
+              @keyframes bevoq-orbit {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+              }
+              @keyframes bevoq-orbit-reverse {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(-360deg); }
+              }
+              @keyframes bevoq-pulse-glow {
+                0%, 100% { box-shadow: 0 0 40px 8px rgba(212,175,55,0.25), 0 0 80px 20px rgba(88,0,24,0.2); }
+                50% { box-shadow: 0 0 70px 20px rgba(212,175,55,0.45), 0 0 120px 40px rgba(88,0,24,0.35); }
+              }
+              @keyframes bevoq-tagline-fade {
+                0%, 100% { opacity: 0.7; letter-spacing: 0.25em; }
+                50% { opacity: 1; letter-spacing: 0.35em; }
+              }
+              @keyframes bevoq-dot-spin {
+                from { transform: rotate(0deg) translateX(68px) rotate(0deg); }
+                to { transform: rotate(360deg) translateX(68px) rotate(-360deg); }
+              }
+              .bevoq-logo-float { animation: bevoq-float 4s ease-in-out infinite; }
+              .bevoq-shimmer-text {
+                background: linear-gradient(90deg, #D4AF37 0%, #fff8dc 30%, #D4AF37 50%, #b8860b 70%, #D4AF37 100%);
+                background-size: 200% auto;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                animation: bevoq-shimmer 3s linear infinite;
+              }
+              .bevoq-orbit-ring {
+                animation: bevoq-orbit 8s linear infinite;
+              }
+              .bevoq-orbit-ring-rev {
+                animation: bevoq-orbit-reverse 12s linear infinite;
+              }
+              .bevoq-pulse { animation: bevoq-pulse-glow 3s ease-in-out infinite; }
+              .bevoq-tagline { animation: bevoq-tagline-fade 4s ease-in-out infinite; }
+            `}</style>
+
+            <div className="relative flex flex-col items-center justify-center select-none" style={{ width: 280, height: 320 }}>
+
+              {/* Outer orbit ring */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="bevoq-orbit-ring" style={{ width: 220, height: 220, position: "relative" }}>
+                  <svg width="220" height="220" viewBox="0 0 220 220">
+                    <circle cx="110" cy="110" r="104" fill="none" stroke="#D4AF37" strokeWidth="1" strokeDasharray="6 10" opacity="0.5" />
+                    {/* Gold dot travelling the ring */}
+                    <circle cx="110" cy="6" r="5" fill="#D4AF37" opacity="0.9" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Inner orbit ring (reverse) */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="bevoq-orbit-ring-rev" style={{ width: 170, height: 170, position: "relative" }}>
+                  <svg width="170" height="170" viewBox="0 0 170 170">
+                    <circle cx="85" cy="85" r="80" fill="none" stroke="#580018" strokeWidth="0.8" strokeDasharray="3 14" opacity="0.6" />
+                    <circle cx="85" cy="5" r="3.5" fill="#580018" opacity="0.85" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Core glowing badge */}
+              <div
+                className="bevoq-logo-float bevoq-pulse relative z-10 flex flex-col items-center justify-center rounded-full"
+                style={{
+                  width: 140,
+                  height: 140,
+                  background: "radial-gradient(circle at 35% 35%, #7a001f 0%, #580018 55%, #3a0010 100%)",
+                  border: "2px solid #D4AF37",
+                }}
+              >
+                {/* B monogram */}
+                <span
+                  className="bevoq-shimmer-text font-serif"
+                  style={{ fontSize: 64, lineHeight: 1, fontWeight: 700, fontFamily: "Georgia, serif" }}
+                >
+                  B
+                </span>
+                <span
+                  style={{
+                    fontSize: 9,
+                    letterSpacing: "0.3em",
+                    color: "#D4AF37",
+                    opacity: 0.8,
+                    marginTop: 2,
+                    fontWeight: 600,
+                    textTransform: "uppercase",
+                    fontFamily: "sans-serif",
+                  }}
+                >
+                  BEVOQ
+                </span>
+              </div>
+
+              {/* Brand name below */}
+              <div className="relative z-10 mt-6 text-center">
+                <div
+                  className="bevoq-shimmer-text font-serif tracking-[0.18em]"
+                  style={{ fontSize: 28, fontWeight: 700 }}
+                >
+                  BEVOQ
+                </div>
+                {/* Tagline */}
+                <div
+                  className="bevoq-tagline mt-3 uppercase text-white/80"
+                  style={{ fontSize: 10, letterSpacing: "0.28em", fontWeight: 500 }}
+                >
+                  Believe What You Wear
+                </div>
+                {/* Decorative line */}
+                <div className="flex items-center justify-center gap-2 mt-2">
+                  <div style={{ width: 28, height: 1, background: "linear-gradient(to right, transparent, #D4AF37)" }} />
+                  <div style={{ width: 4, height: 4, borderRadius: "50%", background: "#D4AF37", opacity: 0.8 }} />
+                  <div style={{ width: 28, height: 1, background: "linear-gradient(to left, transparent, #D4AF37)" }} />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
